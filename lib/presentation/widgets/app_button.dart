@@ -1,6 +1,6 @@
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
+import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:flutter/material.dart';
-import '../design_system/app_theme.dart';
-import '../design_system/app_colors.dart';
 
 enum AppButtonType {
   primary,
@@ -16,12 +16,16 @@ class AppButton extends StatelessWidget {
     required this.text,
     this.buttonType = AppButtonType.primary,
     this.isLoading = false,
+    this.leadingIcon,
+    this.isFullWidth = false,
   });
 
   final VoidCallback? onPressed;
   final String text;
   final AppButtonType buttonType;
   final bool isLoading;
+  final Widget? leadingIcon;
+  final bool isFullWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -37,17 +41,17 @@ class AppButton extends StatelessWidget {
 
     switch (buttonType) {
       case AppButtonType.primary:
-        backgroundColor = appColors.brandSecondary!;
+        backgroundColor = theme.primaryColor;
         foregroundColor = AppColors.textIconsPrimary;
         disabledBackgroundColor = appColors.surfaceQuaternary!;
         disabledForegroundColor = appColors.textIconsTertiary!;
         break;
       case AppButtonType.secondary:
         backgroundColor = appColors.surfaceSecondary!;
-        foregroundColor = theme.primaryColor;
+        foregroundColor = appColors.textIconsSecondary!.withOpacity(0.8);
         disabledBackgroundColor = appColors.surfaceQuaternary!;
         disabledForegroundColor = appColors.textIconsTertiary!;
-        borderSide = BorderSide(color: theme.primaryColor, width: 1);
+        borderSide = BorderSide(color: appColors.surfaceQuaternary!, width: 1.5);
         break;
       case AppButtonType.tertiary:
         backgroundColor = Colors.transparent;
@@ -63,31 +67,47 @@ class AppButton extends StatelessWidget {
         break;
     }
 
-    return ElevatedButton(
-      onPressed: isLoading ? null : onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: backgroundColor,
-        foregroundColor: foregroundColor,
-        disabledBackgroundColor: disabledBackgroundColor,
-        disabledForegroundColor: disabledForegroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          side: borderSide ?? BorderSide.none,
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        textStyle: textTheme.labelLarge,
-        elevation: 0,
+    final buttonContent = isLoading
+        ? SizedBox(
+            width: textTheme.labelLarge!.fontSize! * 1.2,
+            height: textTheme.labelLarge!.fontSize! * 1.2,
+            child: CircularProgressIndicator(
+              color: foregroundColor,
+              strokeWidth: 2,
+            ),
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (leadingIcon != null) ...[
+                leadingIcon!,
+                const SizedBox(width: 12),
+              ],
+              Text(text),
+            ],
+          );
+
+    final buttonStyle = ElevatedButton.styleFrom(
+      backgroundColor: backgroundColor,
+      foregroundColor: foregroundColor,
+      disabledBackgroundColor: disabledBackgroundColor,
+      disabledForegroundColor: disabledForegroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+        side: borderSide ?? BorderSide.none,
       ),
-      child: isLoading
-          ? SizedBox(
-              width: textTheme.labelLarge!.fontSize! * 1.2,
-              height: textTheme.labelLarge!.fontSize! * 1.2,
-              child: CircularProgressIndicator(
-                color: foregroundColor,
-                strokeWidth: 2,
-              ),
-            )
-          : Text(text),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      textStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
+      elevation: 0,
+      shadowColor: Colors.transparent,
     );
+
+    return isFullWidth
+        ? SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(onPressed: isLoading ? null : onPressed, style: buttonStyle, child: buttonContent),
+          )
+        : ElevatedButton(onPressed: isLoading ? null : onPressed, style: buttonStyle, child: buttonContent);
   }
 }

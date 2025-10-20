@@ -8,11 +8,13 @@ class AppTextField extends StatelessWidget {
     this.labelText,
     this.prefixIcon,
     this.validator,
+    this.prefixIconColor,
   });
 
   final TextEditingController? controller;
   final String? labelText;
   final IconData? prefixIcon;
+  final Color? prefixIconColor;
   final FormFieldValidator<String>? validator;
 
   @override
@@ -28,7 +30,7 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: textTheme.bodyMedium?.copyWith(color: appColors.textIconsTertiary),
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: appColors.textIconsTertiary) : null,
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: prefixIconColor) : null,
         
         // Border Styles
         enabledBorder: OutlineInputBorder(
