@@ -9,6 +9,7 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.validator,
     this.prefixIconColor,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -16,6 +17,7 @@ class AppTextField extends StatelessWidget {
   final IconData? prefixIcon;
   final Color? prefixIconColor;
   final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class AppTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       validator: validator,
+      onChanged: onChanged,
       style: textTheme.bodyLarge,
       decoration: InputDecoration(
         labelText: labelText,

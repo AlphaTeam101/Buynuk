@@ -1,98 +1,89 @@
+import 'package:e_commerce/presentation/auth/bloc/login_bloc.dart';
 import 'package:e_commerce/presentation/auth/register_screen.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:e_commerce/presentation/widgets/app_text_field.dart';
+import 'package:e_commerce/presentation/widgets/app_toast.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:e_commerce/presentation/home/home_screen.dart'; // Import the home screen
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _isFormValid = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _emailController.addListener(_validateForm);
-    _passwordController.addListener(_validateForm);
-  }
-
-  @override
-  void dispose() {
-    _emailController.removeListener(_validateForm);
-    _passwordController.removeListener(_validateForm);
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _validateForm() {
-    final isValid = _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
-    if (_isFormValid != isValid) {
-      setState(() {
-        _isFormValid = isValid;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: -100,
-            right: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.primaryColor.withOpacity(0.1),
-              ),
-            ).animate().scale(delay: 200.ms, duration: 1500.ms, curve: Curves.easeOutCubic),
-          ),
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 60),
-                    const _Header(),
-                    const SizedBox(height: 40),
-                    _LoginForm(
-                      emailController: _emailController,
-                      passwordController: _passwordController,
-                    ),
-                    const SizedBox(height: 32),
-                    _PrimaryActions(isFormValid: _isFormValid),
-                    const SizedBox(height: 32),
-                    const _SocialLogins(),
-                    const SizedBox(height: 40),
-                    const _SignupRedirect(),
-                    const SizedBox(height: 20),
-                  ]
-                      .animate(interval: 100.ms)
-                      .fade(duration: 600.ms, curve: Curves.easeOutCubic)
-                      .slideY(begin: 0.5, curve: Curves.easeOutCubic),
+      body: BlocListener<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state.status == LoginStatus.failure) {
+            AppToast.show(
+              context: context,
+              title: 'Login Failed',
+              message: state.errorMessage,
+              type: ToastType.error,
+            );
+          }
+          if (state.status == LoginStatus.success) {
+            AppToast.show(
+              context: context,
+              title: 'Login Successful',
+              message: 'Welcome back!',
+              type: ToastType.success,
+            );
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              (Route<dynamic> route) => false,
+            );
+          }
+        },
+        child: Stack(
+          children: [
+            Positioned(
+              top: -100,
+              right: -100,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: theme.primaryColor.withOpacity(0.1),
+                ),
+              ).animate().scale(delay: 200.ms, duration: 1500.ms, curve: Curves.easeOutCubic),
+            ),
+            SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 60),
+                      const _Header(),
+                      const SizedBox(height: 40),
+                      const _LoginForm(),
+                      const SizedBox(height: 32),
+                      const _PrimaryActions(),
+                      const SizedBox(height: 32),
+                      const _SocialLogins(),
+                      const SizedBox(height: 40),
+                      const _SignupRedirect(),
+                      const SizedBox(height: 20),
+                    ]
+                        .animate(interval: 100.ms)
+                        .fade(duration: 600.ms, curve: Curves.easeOutCubic)
+                        .slideY(begin: 0.5, curve: Curves.easeOutCubic),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -122,49 +113,30 @@ class _Header extends StatelessWidget {
   }
 }
 
-class _LoginForm extends StatefulWidget {
-  const _LoginForm({
-    required this.emailController,
-    required this.passwordController,
-  });
-
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-
-  @override
-  State<_LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<_LoginForm> {
-  @override
-  void initState() {
-    super.initState();
-    widget.emailController.addListener(() => setState(() {}));
-    widget.passwordController.addListener(() => setState(() {}));
-  }
+class _LoginForm extends StatelessWidget {
+  const _LoginForm();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final appColors = theme.extension<AppColorsExtension>()!;
-    final isEmailEmpty = widget.emailController.text.isEmpty;
-    final isPasswordEmpty = widget.passwordController.text.isEmpty;
+    final state = context.watch<LoginBloc>().state;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         AppTextField(
-          controller: widget.emailController,
+          onChanged: (email) => context.read<LoginBloc>().add(LoginEmailChanged(email)),
           labelText: 'Email Address',
           prefixIcon: Icons.email_outlined,
-          prefixIconColor: isEmailEmpty ? appColors.textIconsTertiary : theme.primaryColor,
+          prefixIconColor: state.email.isEmpty ? appColors.textIconsTertiary : theme.primaryColor,
         ),
         const SizedBox(height: 16),
         AppTextField(
-          controller: widget.passwordController,
+          onChanged: (password) => context.read<LoginBloc>().add(LoginPasswordChanged(password)),
           labelText: 'Password',
           prefixIcon: Icons.lock_outline,
-          prefixIconColor: isPasswordEmpty ? appColors.textIconsTertiary : theme.primaryColor,
+          prefixIconColor: state.password.isEmpty ? appColors.textIconsTertiary : theme.primaryColor,
         ),
         const SizedBox(height: 12),
         Text(
@@ -180,38 +152,41 @@ class _LoginFormState extends State<_LoginForm> {
 }
 
 class _PrimaryActions extends StatelessWidget {
-  const _PrimaryActions({required this.isFormValid});
-  final bool isFormValid;
+  const _PrimaryActions();
 
   @override
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).extension<AppColorsExtension>()!;
-    return Column(
-      children: [
-        AppButton(
-          text: 'Log In',
-          onPressed: isFormValid ? () {} : null,
-          isFullWidth: true,
-          buttonType: AppButtonType.primary,
-        ),
-        const SizedBox(height: 24),
-        Row(
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return Column(
           children: [
-            const Expanded(child: Divider()),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'OR',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: appColors.textIconsQuaternary,
-                    ),
-              ),
+            AppButton(
+              text: 'Log In',
+              onPressed: state.isFormValid ? () => context.read<LoginBloc>().add(LoginSubmitted()) : null,
+              isFullWidth: true,
+              buttonType: AppButtonType.primary,
+              isLoading: state.status == LoginStatus.loading,
             ),
-            const Expanded(child: Divider()),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                const Expanded(child: Divider()),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'OR',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: appColors.textIconsQuaternary,
+                        ),
+                  ),
+                ),
+                const Expanded(child: Divider()),
+              ],
+            ),
           ],
-        ),
-      ],
-    );
+        );
+      },);
   }
 }
 

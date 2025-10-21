@@ -30,6 +30,12 @@ dependencies:
   # Networking
   dio: ^5.4.0
 
+  # Functional Programming
+  fpdart: ^1.1.0
+
+  # Secure Storage
+  flutter_secure_storage: ^9.0.0
+
   # Local Caching
   hive: ^2.2.3
   hive_flutter: ^1.1.0
