@@ -18,6 +18,8 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     this.leadingIcon,
     this.isFullWidth = false,
+    this.textStyle,
+    this.padding,
   });
 
   final VoidCallback? onPressed;
@@ -26,6 +28,8 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final Widget? leadingIcon;
   final bool isFullWidth;
+  final TextStyle? textStyle;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +86,7 @@ class AppButton extends StatelessWidget {
             children: [
               if (leadingIcon != null) ...[
                 leadingIcon!,
-                const SizedBox(width: 12),
+                const SizedBox(width: 8),
               ],
               Text(text),
             ],
@@ -97,8 +101,8 @@ class AppButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.0),
         side: borderSide ?? BorderSide.none,
       ),
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      textStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
+      padding: padding ?? const EdgeInsets.symmetric(vertical: 16),
+      textStyle: textStyle ?? textTheme.labelLarge?.copyWith(fontWeight: FontWeight.bold),
       elevation: 0,
       shadowColor: Colors.transparent,
     );

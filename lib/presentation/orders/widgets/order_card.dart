@@ -22,7 +22,7 @@ class OrderCard extends StatelessWidget {
       case OrderStatus.pending:
         return appColors.feedbackWarning!;
       default:
-        return appColors.brandPrimary!;
+        return Theme.of(context).primaryColor;
     }
   }
 
@@ -133,7 +133,9 @@ class _OrderCardBody extends StatelessWidget {
             text: 'Track Order',
             onPressed: () {},
             buttonType: AppButtonType.primary,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            leadingIcon: const Icon(Icons.local_shipping, size: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            textStyle: textTheme.labelMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
         );
       case OrderStatus.delivered:
