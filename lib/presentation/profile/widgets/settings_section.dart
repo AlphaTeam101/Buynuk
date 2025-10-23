@@ -1,6 +1,8 @@
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../design_system/app_colors.dart';
+
 class SettingsSection extends StatelessWidget {
   final String title;
   final List<Widget> items;
@@ -27,7 +29,7 @@ class SettingsSection extends StatelessWidget {
             child: Text(
               title,
               style: textTheme.labelLarge?.copyWith(
-                color: appColors.surfaceSecondary,
+                color: AppColors.textIconsPrimaryDark78,
                 fontWeight: FontWeight.bold,
               ),
             ),

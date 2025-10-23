@@ -21,8 +21,8 @@ class ProfileHeader extends StatelessWidget {
               children: [
                 Text(
                   "John", // User's name
-                  style: textTheme.displaySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
+                  style: textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.normal,
                     color: theme.colorScheme.onSurface, // Corrected
                   ),
                 ),

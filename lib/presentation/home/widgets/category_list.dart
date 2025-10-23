@@ -1,5 +1,6 @@
 import 'package:e_commerce/domain/categories/entities/category.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/products_by_category/products_by_category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -43,35 +44,46 @@ class _CategoryCard extends StatelessWidget {
     final appColors = theme.extension<AppColorsExtension>()!;
     final textTheme = theme.textTheme;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundColor: appColors.surfaceSecondary,
-          child: ClipOval(
-            child: Image.network(
-              category.image,
-              width: 64,
-              height: 64,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator(strokeWidth: 2));
-              },
-              errorBuilder: (context, error, stackTrace) {
-                // If the image fails to load (like with pravatar.cc), show a fallback icon.
-                return const Icon(Icons.category_outlined, color: Colors.grey, size: 32);
-              },
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductsByCategoryScreen(category: category),
+          ),
+        );
+      },
+      borderRadius: BorderRadius.circular(12.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 32,
+            backgroundColor: appColors.surfaceSecondary,
+            child: ClipOval(
+              child: Image.network(
+                category.image,
+                width: 64,
+                height: 64,
+                fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  // If the image fails to load (like with pravatar.cc), show a fallback icon.
+                  return const Icon(Icons.category_outlined, color: Colors.grey, size: 32);
+                },
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          category.name,
-          style: textTheme.bodyMedium?.copyWith(color: appColors.textIconsSecondary),
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            category.name,
+            style: textTheme.bodyMedium?.copyWith(color: appColors.textIconsSecondary),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -16,6 +16,7 @@ class AppColors {
   static const Color textIconsTertiary = Color(0xFF9B99A9);
   static const Color textIconsQuaternary = Color(0xFF6A687A);
   static const Color textIconsPrimaryDark = Color(0xFF000000);
+  static const Color textIconsPrimaryDark78 = Color(0xC7000000);
 
   // Surface Colors
   static const Color surfacePrimary = Color(0xFFFFFFFF);

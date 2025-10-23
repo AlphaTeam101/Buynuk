@@ -1,4 +1,4 @@
-import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class SettingsListItem extends StatelessWidget {
@@ -21,7 +21,6 @@ class SettingsListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final appColors = theme.extension<AppColorsExtension>()!;
 
     return InkWell(
       onTap: onTap,
@@ -31,20 +30,20 @@ class SettingsListItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: iconColor ?? appColors.surfaceSecondary,
+              color: iconColor ?? AppColors.textIconsQuaternary,
               size: 24,
             ),
             const SizedBox(width: 16),
             Text(
               label,
               style: textTheme.bodyLarge?.copyWith(
-                color: labelColor ?? appColors.surfaceSecondary,
+                color: labelColor ?? AppColors.textIconsPrimaryDark78,
               ),
             ),
             const Spacer(),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios,
-              color: appColors.surfaceSecondary,
+              color: AppColors.textIconsQuaternary,
               size: 18,
             ),
           ],

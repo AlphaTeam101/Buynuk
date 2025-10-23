@@ -1,6 +1,8 @@
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../design_system/app_colors.dart';
+
 class SettingsToggleItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -27,14 +29,14 @@ class SettingsToggleItem extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: appColors.surfaceSecondary,
+            color: AppColors.textIconsQuaternary,
             size: 24,
           ),
           const SizedBox(width: 16),
           Text(
             label,
             style: textTheme.bodyLarge?.copyWith(
-              color: appColors.surfaceSecondary,
+              color: AppColors.textIconsPrimaryDark78,
             ),
           ),
           const Spacer(),

@@ -26,6 +26,7 @@ import 'package:e_commerce/presentation/auth/bloc/login_bloc.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce/presentation/home/bloc/home_bloc.dart';
 import 'package:e_commerce/presentation/product_details/bloc/product_details_bloc.dart';
+import 'package:e_commerce/presentation/products_by_category/bloc/products_by_category_bloc.dart';
 import 'package:e_commerce/presentation/search/bloc/search_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -38,6 +39,7 @@ void setupGetIt() {
   getIt.registerFactory(() => HomeBloc(getIt(), getIt()));
   getIt.registerFactory(() => SearchBloc(getIt()));
   getIt.registerFactory(() => ProductDetailsBloc(getIt()));
+  getIt.registerFactory(() => ProductsByCategoryBloc(productRepository: getIt()));
   getIt.registerLazySingleton(() => CartBloc(getIt(), getIt(), getIt(), getIt(), getIt()));
 
   // Use Cases
