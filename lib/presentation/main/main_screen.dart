@@ -52,10 +52,10 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         children: [
-          HomeScreen(),
-          CartScreen(),
-          OrdersScreen(),
-          ProfileScreen(),
+          const HomeScreen(),
+          const CartScreen(),
+          const OrdersScreen(),
+          const ProfileScreen(), // Added const here
         ],
       ),
       bottomNavigationBar: BlocBuilder<CartBloc, CartState>(

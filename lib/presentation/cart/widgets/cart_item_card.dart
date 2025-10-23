@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
-class CartItemCard extends StatefulWidget { // Changed to StatefulWidget
+class CartItemCard extends StatefulWidget {
   final CartItem item;
 
   const CartItemCard({super.key, required this.item});
@@ -54,19 +54,19 @@ class _CartItemCardState extends State<CartItemCard> with SingleTickerProviderSt
     final textTheme = theme.textTheme;
     final appColors = theme.extension<AppColorsExtension>()!;
 
-    return FadeTransition( // Apply fade animation
+    return FadeTransition(
       opacity: _fadeAnimation,
-      child: SlideTransition( // Apply slide animation
+      child: SlideTransition(
         position: _slideAnimation,
         child: Slidable(
-          key: ValueKey(widget.item.product.id), // Use widget.item
+          // Removed key: ValueKey(widget.item.product.id) from Slidable to avoid GlobalKey conflict
           endActionPane: ActionPane(
             motion: const BehindMotion(),
             extentRatio: 0.25,
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  _removeItem(); // Call local method to animate then remove
+                  _removeItem();
                 },
                 backgroundColor: appColors.paletteRed100!,
                 foregroundColor: Colors.white,
@@ -149,7 +149,7 @@ class _QuantityControls extends StatelessWidget {
           },
           child: Text(
             item.quantity.toString(),
-            key: ValueKey<int>(item.quantity), // Key is crucial for AnimatedSwitcher
+            key: ValueKey<String>('${item.product.id}-${item.quantity}'), // Made key unique
             style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
