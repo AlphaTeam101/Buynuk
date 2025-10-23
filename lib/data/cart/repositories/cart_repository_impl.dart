@@ -6,6 +6,7 @@ import 'package:e_commerce/domain/cart/repositories/cart_repository.dart';
 import 'package:e_commerce/domain/products/entities/product.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:e_commerce/data/categories/models/category_model.dart';
+import 'package:e_commerce/domain/categories/entities/category.dart';
 
 
 class CartRepositoryImpl implements CartRepository {
@@ -61,7 +62,24 @@ class CartRepositoryImpl implements CartRepository {
   Future<Either<String, List<CartItem>>> getCartItems() async {
     try {
       final items = _localDataSource.getCartItems();
-      return Right(items.cast<CartItem>());
+      final domainItems = items.map((model) => CartItem(
+        product: Product(
+          id: model.product.id,
+          title: model.product.title,
+          price: model.product.price,
+          description: model.product.description,
+          category: Category(
+            id: model.product.category.id,
+            name: model.product.category.name,
+            image: model.product.category.image,
+            slug: model.product.category.slug,
+          ),
+          images: model.product.images,
+          slug: model.product.slug,
+        ),
+        quantity: model.quantity,
+      )).toList();
+      return Right(domainItems);
     } catch (e) {
       return Left(e.toString());
     }

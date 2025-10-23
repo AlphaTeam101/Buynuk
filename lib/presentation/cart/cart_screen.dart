@@ -14,44 +14,37 @@ class CartScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Cart'),
-        backgroundColor: theme.scaffoldBackgroundColor,
-        elevation: 0,
-      ),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          if (state.status == CartStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state.items.isEmpty) {
-            return const _EmptyCartBody();
-          }
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state.status == CartStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.items.isEmpty) {
+          return const _EmptyCartBody();
+        }
 
-          return Stack(
-            children: [
-              ListView.builder(
-                padding: const EdgeInsets.all(16.0).copyWith(bottom: 150), // Padding for the summary bar
-                itemCount: state.items.length,
-                itemBuilder: (context, index) {
-                  final item = state.items[index];
-                  return CartItemCard(item: item)
-                      .animate()
-                      .fade(duration: 500.ms, delay: (index * 100).ms)
-                      .slideX(begin: -0.2, curve: Curves.easeOutCubic);
-                },
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: _CheckoutBar(state: state),
-              ),
-            ],
-          );
-        },
-      ),
+        return Stack(
+          children: [
+            ListView.builder(
+              padding: const EdgeInsets.all(16.0).copyWith(bottom: 150), // Padding for the summary bar
+              itemCount: state.items.length,
+              itemBuilder: (context, index) {
+                final item = state.items[index];
+                return CartItemCard(item: item)
+                    .animate()
+                    .fade(duration: 500.ms, delay: (index * 100).ms)
+                    .slideX(begin: -0.2, curve: Curves.easeOutCubic);
+              },
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: _CheckoutBar(state: state),
+            ),
+          ],
+        );
+      },
     );
   }
 }
