@@ -55,62 +55,57 @@ class _MainScreenState extends State<MainScreen> {
               _selectedIndex = index;
             });
           },
-          children: const [
+          children: [
             HomeScreen(),
             CartScreen(),
             OrdersScreen(),
             ProfileScreen(),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: BlocBuilder<CartBloc, CartState>(
-                builder: (context, state) {
-                  debugPrint('MainScreen BlocBuilder rebuilding. Total items: ${state.totalItems}');
-                  return Badge(
+        bottomNavigationBar: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            debugPrint('MainScreen BlocBuilder rebuilding entire BottomNavigationBar. Total items: ${state.totalItems}');
+            return BottomNavigationBar(
+              items: <BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Badge(
                     label: Text(state.totalItems.toString()),
                     isLabelVisible: state.items.isNotEmpty,
                     backgroundColor: Colors.red,
                     child: const Icon(Icons.shopping_cart_outlined),
-                  );
-                },
-              ),
-              activeIcon: BlocBuilder<CartBloc, CartState>(
-                builder: (context, state) {
-                  debugPrint('MainScreen ActiveIcon BlocBuilder rebuilding. Total items: ${state.totalItems}');
-                  return Badge(
+                  ),
+                  activeIcon: Badge(
                     label: Text(state.totalItems.toString()),
                     isLabelVisible: state.items.isNotEmpty,
                     backgroundColor: Colors.red,
                     child: const Icon(Icons.shopping_cart),
-                  );
-                },
-              ),
-              label: 'Cart',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt_outlined),
-              activeIcon: Icon(Icons.list_alt),
-              label: 'Orders',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.grey,
-          showUnselectedLabels: true,
+                  ),
+                  label: 'Cart',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.list_alt_outlined),
+                  activeIcon: Icon(Icons.list_alt),
+                  label: 'Orders',
+                ),
+                const BottomNavigationBarItem(
+                  icon: Icon(Icons.person_outline),
+                  activeIcon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: Theme.of(context).primaryColor,
+              unselectedItemColor: Colors.grey,
+              showUnselectedLabels: true,
+            );
+          },
         ),
       ),
     );

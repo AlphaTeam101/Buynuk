@@ -17,7 +17,6 @@ class CartScreen extends StatelessWidget {
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        debugPrint('CartScreen BlocBuilder rebuilding. Status: ${state.status}, Total items: ${state.totalItems}');
         if (state.status == CartStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -28,7 +27,7 @@ class CartScreen extends StatelessWidget {
         return Stack(
           children: [
             ListView.builder(
-              padding: const EdgeInsets.all(16.0).copyWith(bottom: 150), // Padding for the summary bar
+              padding: const EdgeInsets.all(16.0).copyWith(bottom: 150,top: 24), // Padding for the summary bar
               itemCount: state.items.length,
               itemBuilder: (context, index) {
                 final item = state.items[index];

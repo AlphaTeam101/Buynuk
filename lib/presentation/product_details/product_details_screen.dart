@@ -7,6 +7,7 @@ import 'package:e_commerce/presentation/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:e_commerce/core/di/get_it.dart'; // Import getIt
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({super.key});
@@ -93,7 +94,7 @@ class _AddToCartBar extends StatelessWidget {
             child: AppButton(
               text: 'Add to Cart',
               onPressed: () {
-                context.read<CartBloc>().add(CartItemAdded(product));
+                getIt<CartBloc>().add(CartItemAdded(product)); // Use getIt directly
                 AppToast.show(
                   context: context,
                   title: 'Added to Cart',

@@ -38,7 +38,7 @@ void setupGetIt() {
   getIt.registerFactory(() => HomeBloc(getIt(), getIt()));
   getIt.registerFactory(() => SearchBloc(getIt()));
   getIt.registerFactory(() => ProductDetailsBloc(getIt()));
-  getIt.registerFactory(() => CartBloc(getIt(), getIt(), getIt(), getIt(), getIt()));
+  getIt.registerLazySingleton(() => CartBloc(getIt(), getIt(), getIt(), getIt(), getIt()));
 
   // Use Cases
   getIt.registerLazySingleton(() => LoginUseCase(getIt()));
