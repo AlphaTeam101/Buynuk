@@ -1,6 +1,7 @@
 import 'package:e_commerce/presentation/auth/bloc/login_bloc.dart';
 import 'package:e_commerce/presentation/auth/register_screen.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/main/main_screen.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:e_commerce/presentation/widgets/app_text_field.dart';
 import 'package:e_commerce/presentation/widgets/app_toast.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:e_commerce/presentation/home/home_screen.dart'; // Import the home screen
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
               type: ToastType.success,
             );
             Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              MaterialPageRoute(builder: (context) => const MainScreen()), // Navigate to MainScreen
               (Route<dynamic> route) => false,
             );
           }
@@ -186,7 +186,8 @@ class _PrimaryActions extends StatelessWidget {
             ),
           ],
         );
-      },);
+      },
+    );
   }
 }
 
