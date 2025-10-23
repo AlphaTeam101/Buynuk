@@ -1,7 +1,8 @@
 part of 'cart_bloc.dart';
 
-enum CartStatus { initial, loading, success, failure }
+enum CartStatus { initial, loading, loaded, error, failure, success }
 
+@immutable
 class CartState extends Equatable {
   final CartStatus status;
   final List<CartItem> items;
@@ -11,13 +12,10 @@ class CartState extends Equatable {
     this.status = CartStatus.initial,
     this.items = const [],
     this.errorMessage,
-  }) {
-    debugPrint('CartState created/updated. Status: $status, Total items: ${items.length}');
-  }
+  });
 
-  // Calculated properties for convenience in the UI
-  double get subtotal => items.fold(0, (total, item) => total + (item.product.price * item.quantity));
-  int get totalItems => items.fold(0, (total, item) => total + item.quantity);
+  double get subtotal => items.fold(0.0, (sum, item) => sum + (item.product.price * item.quantity));
+  int get totalItems => items.fold(0, (sum, item) => sum + item.quantity);
 
   CartState copyWith({
     CartStatus? status,

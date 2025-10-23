@@ -7,6 +7,7 @@ import 'package:e_commerce/domain/cart/usecases/get_cart_items_usecase.dart';
 import 'package:e_commerce/domain/cart/usecases/remove_from_cart_usecase.dart';
 import 'package:e_commerce/domain/cart/usecases/update_quantity_usecase.dart';
 import 'package:e_commerce/domain/products/entities/product.dart';
+import 'package:flutter/cupertino.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -24,7 +25,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     this._removeFromCartUseCase,
     this._updateQuantityUseCase,
     this._clearCartUseCase,
-  ) : super(const CartState()) {
+  ) : super(CartState()) { // Removed const from CartState()
     on<CartStarted>(_onCartStarted);
     on<CartItemAdded>(_onCartItemAdded);
     on<CartItemRemoved>(_onCartItemRemoved);

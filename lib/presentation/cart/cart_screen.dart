@@ -28,7 +28,7 @@ class CartScreen extends StatelessWidget {
         return Stack(
           children: [
             ListView.builder(
-              padding: const EdgeInsets.all(16.0).copyWith(bottom: 150), // Padding for the summary bar
+              padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 150), // Added 24.0 top padding
               itemCount: state.items.length,
               itemBuilder: (context, index) {
                 final item = state.items[index];
@@ -103,11 +103,28 @@ class _CheckoutBar extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Subtotal (${state.totalItems} items)', style: textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(scale: animation, child: child);
+                },
+                child: Text(
+                  'Subtotal (${state.totalItems} items)',
+                  key: ValueKey<int>(state.totalItems), // Key is crucial for AnimatedSwitcher
+                  style: textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                ),
+              ),
               const SizedBox(height: 4),
-              Text(
-                '\$${state.subtotal.toStringAsFixed(2)}',
-                style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (Widget child, Animation<double> animation) {
+                  return ScaleTransition(scale: animation, child: child);
+                },
+                child: Text(
+                  '\$${state.subtotal.toStringAsFixed(2)}',
+                  key: ValueKey<double>(state.subtotal), // Key is crucial for AnimatedSwitcher
+                  style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
