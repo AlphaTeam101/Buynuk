@@ -31,32 +31,24 @@ void main() async {
   final authRepository = getIt<AuthRepository>();
   final userOrError = await authRepository.getProfile();
 
+  // Get the singleton CartBloc instance and add the initial event
+  final CartBloc cartBlocInstance = getIt<CartBloc>()..add(CartStarted());
+
   // If the user is authenticated, go to the MainScreen, otherwise go to LoginPage.
   final Widget initialScreen = userOrError.fold(
     (error) => const LoginPage(),
     (user) => const MainScreen(),
   );
 
-  runApp(BlocProvider<CartBloc>(
-    create: (context) => getIt<CartBloc>()..add(CartStarted()),
-    child: MyApp(initialScreen: initialScreen),
-  ));
-}
-
-class MyApp extends StatelessWidget {
-  final Widget initialScreen;
-
-  const MyApp({super.key, required this.initialScreen});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  runApp(BlocProvider<CartBloc>.value(
+    value: cartBlocInstance,
+    child: MaterialApp(
       title: 'Platini Store',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       home: initialScreen,
       debugShowCheckedModeBanner: false,
-    );
-  }
+    ),
+  ));
 }

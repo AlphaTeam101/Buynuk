@@ -11,7 +11,9 @@ class CartState extends Equatable {
     this.status = CartStatus.initial,
     this.items = const [],
     this.errorMessage,
-  });
+  }) {
+    debugPrint('CartState created/updated. Status: $status, Total items: ${items.length}');
+  }
 
   // Calculated properties for convenience in the UI
   double get subtotal => items.fold(0, (total, item) => total + (item.product.price * item.quantity));
