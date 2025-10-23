@@ -13,10 +13,9 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
   @override
   ProductModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
-    var map = <int, dynamic>{
+    final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    final fields = map;
     return ProductModel(
       id: fields[0] as int,
       title: fields[1] as String,

@@ -1,7 +1,10 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-import 'package:hive/hive.dart';
-import '../../products/models/product_model.dart';
-import 'cart_item_model.dart';
+
+part of 'cart_item_model.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
 
 class CartItemModelAdapter extends TypeAdapter<CartItemModel> {
   @override
