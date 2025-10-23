@@ -5,6 +5,7 @@ import 'package:e_commerce/presentation/orders/orders_screen.dart';
 import 'package:e_commerce/presentation/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart'; // Import for debugPrint
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -67,6 +68,7 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
+                debugPrint('MainScreen BlocBuilder rebuilding. Total items: ${state.totalItems}');
                 return Badge(
                   label: Text(state.totalItems.toString()),
                   isLabelVisible: state.items.isNotEmpty,
@@ -77,6 +79,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             activeIcon: BlocBuilder<CartBloc, CartState>(
               builder: (context, state) {
+                debugPrint('MainScreen ActiveIcon BlocBuilder rebuilding. Total items: ${state.totalItems}');
                 return Badge(
                   label: Text(state.totalItems.toString()),
                   isLabelVisible: state.items.isNotEmpty,

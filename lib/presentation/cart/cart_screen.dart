@@ -5,6 +5,7 @@ import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/foundation.dart'; // Import for debugPrint
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -16,6 +17,7 @@ class CartScreen extends StatelessWidget {
 
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
+        debugPrint('CartScreen BlocBuilder rebuilding. Status: ${state.status}, Total items: ${state.totalItems}');
         if (state.status == CartStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
