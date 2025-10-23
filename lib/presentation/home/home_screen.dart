@@ -56,46 +56,43 @@ class _HomeViewState extends State<_HomeView> {
     final textTheme = Theme.of(context).textTheme;
     final appColors = Theme.of(context).extension<AppColorsExtension>()!;
 
-    return Scaffold(
-      backgroundColor: appColors.surfaceSecondary, // Use a slightly different color for the background
-      body: BlocBuilder<HomeBloc, HomeState>(
-        builder: (context, state) {
-          if (state.status == HomeStatus.initial || (state.status == HomeStatus.loading && state.products.isEmpty)) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state.status == HomeStatus.failure) {
-            return Center(child: Text('Failed to fetch data: ${state.errorMessage}'));
-          }
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, state) {
+        if (state.status == HomeStatus.initial || (state.status == HomeStatus.loading && state.products.isEmpty)) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state.status == HomeStatus.failure) {
+          return Center(child: Text('Failed to fetch data: ${state.errorMessage}'));
+        }
 
-          return CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              const HomeAppBar(),
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              SliverToBoxAdapter(child: CategoryList(categories: state.categories)),
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              const SliverToBoxAdapter(child: PromoBanner()),
-              const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              SliverToBoxAdapter(
+        return CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            const HomeAppBar(),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            SliverToBoxAdapter(child: CategoryList(categories: state.categories)),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            const SliverToBoxAdapter(child: PromoBanner()),
+            const SliverToBoxAdapter(child: SizedBox(height: 24)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text("All Products", style: textTheme.titleLarge),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            ProductGrid(products: state.products),
+            if (state.status == HomeStatus.loading && state.products.isNotEmpty)
+              const SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text("All Products", style: textTheme.titleLarge),
+                  padding: EdgeInsets.symmetric(vertical: 16.0),
+                  child: Center(child: CircularProgressIndicator()),
                 ),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
-              ProductGrid(products: state.products),
-              if (state.status == HomeStatus.loading && state.products.isNotEmpty)
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                ),
-              SliverToBoxAdapter(child: SizedBox(height: MediaQuery.of(context).padding.bottom + 24)),
-            ],
-          );
-        },
-      ),
+            SliverToBoxAdapter(child: SizedBox(height: MediaQuery.of(context).padding.bottom + 24)),
+          ],
+        );
+      },
     );
   }
 }

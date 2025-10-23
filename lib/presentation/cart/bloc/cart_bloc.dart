@@ -72,8 +72,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Future<void> _loadCartItems(Emitter<CartState> emit) async {
     final result = await _getCartItemsUseCase();
     result.fold(
-      (error) => emit(state.copyWith(status: CartStatus.failure, errorMessage: error)),
-      (items) => emit(state.copyWith(status: CartStatus.success, items: items)),
+      (error) {
+        if (!emit.isDone) {
+          emit(state.copyWith(status: CartStatus.failure, errorMessage: error));
+        }
+      },
+      (items) {
+        if (!emit.isDone) {
+          emit(state.copyWith(status: CartStatus.success, items: items));
+        }
+      },
     );
   }
 }
