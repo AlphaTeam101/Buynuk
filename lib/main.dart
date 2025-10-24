@@ -47,7 +47,10 @@ void main() async {
 
   // If the user is authenticated, go to the MainScreen, otherwise go to LoginPage.
   final Widget initialScreen = userOrError.fold(
-    (error) => const LoginScreen(),
+    (error) => BlocProvider<LoginBloc>(
+      create: (context) => getIt<LoginBloc>(),
+      child: const LoginScreen(),
+    ),
     (user) => const MainScreen(),
   );
 
