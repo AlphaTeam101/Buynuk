@@ -54,12 +54,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final appColors = theme.extension<AppColorsExtension>()!;
+    final colorScheme = theme.colorScheme;
 
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
-        color: appColors.surfaceSecondary,
+        color: colorScheme.surface, // Use colorScheme.surface for background
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(24.0),
           topRight: Radius.circular(24.0),
@@ -73,12 +73,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Filters', style: textTheme.headlineSmall),
-                TextButton(onPressed: _onClearFilters, child: const Text('Clear')),
+                Text('Filters', style: textTheme.headlineSmall?.copyWith(color: colorScheme.onSurface)),
+                TextButton(
+                  onPressed: _onClearFilters,
+                  child: Text(
+                    'Clear',
+                    style: TextStyle(color: colorScheme.onSurface),
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: 24),
-            Text('Category', style: textTheme.titleLarge),
+            Text('Category', style: textTheme.titleLarge?.copyWith(color: colorScheme.onSurface)),
             const SizedBox(height: 16),
             Wrap(
               spacing: 8.0,
@@ -95,13 +101,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   },
                   selectedColor: theme.primaryColor,
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : theme.colorScheme.onSurface,
+                    color: isSelected ? Colors.white : colorScheme.onSurface,
                   ),
                 );
               }).toList(),
             ),
             const SizedBox(height: 24),
-            Text('Price Range', style: textTheme.titleLarge),
+            Text('Price Range', style: textTheme.titleLarge?.copyWith(color: colorScheme.onSurface)),
             const SizedBox(height: 16),
             RangeSlider(
               values: _currentRangeValues,

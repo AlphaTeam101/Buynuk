@@ -19,6 +19,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
 
   Future<void> _onThemeChanged(ThemeChanged event, Emitter<ThemeState> emit) async {
     await _secureStorage.write(key: 'isDarkMode', value: event.isDarkMode.toString());
-    emit(ThemeState(event.isDarkMode ? ThemeMode.dark : ThemeMode.light));
+    emit(state.copyWith(
+      themeMode: event.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+    ));
   }
 }

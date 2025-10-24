@@ -44,7 +44,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 child: Container(
                   margin: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
+                    color: theme.colorScheme.onSurface.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
@@ -80,7 +80,7 @@ class CustomBottomNavBar extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? theme.primaryColor : Colors.transparent,
+                color: isSelected ? theme.colorScheme.onSurface : Colors.transparent,
               ),
               child: Text(_getLabel(index), overflow: TextOverflow.ellipsis),
             ),
@@ -117,7 +117,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
     Widget icon = Icon(
       isSelected ? selectedIcon : unselectedIcon,
-      color: isSelected ? theme.primaryColor : Colors.grey,
+      color: isSelected ? theme.colorScheme.onSurface : Colors.grey,
       size: 28,
     );
 

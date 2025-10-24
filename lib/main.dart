@@ -11,6 +11,7 @@ import 'package:e_commerce/presentation/auth/login_screen.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce/presentation/main/main_screen.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/theme_animation_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -59,8 +60,18 @@ void main() async {
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,
-            home: initialScreen,
+            home: ThemeAnimationWrapper(
+              child: initialScreen,
+            ),
             debugShowCheckedModeBanner: false,
+            builder: (context, child) {
+              return AnimatedTheme(
+                data: Theme.of(context),
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                child: child!,
+              );
+            },
           );
         },
       ),
