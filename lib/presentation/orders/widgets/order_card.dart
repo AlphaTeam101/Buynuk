@@ -2,6 +2,7 @@
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:e_commerce/presentation/orders/order_status.dart';
 import 'package:e_commerce/presentation/orders/orders_screen.dart';
+import 'package:e_commerce/presentation/orders/track_order_screen.dart';
 import 'package:e_commerce/presentation/orders/widgets/order_item_row.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
@@ -131,7 +132,9 @@ class _OrderCardBody extends StatelessWidget {
           alignment: Alignment.centerRight,
           child: AppButton(
             text: 'Track Order',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TrackOrderScreen()));
+            },
             buttonType: AppButtonType.primary,
             leadingIcon: const Icon(Icons.local_shipping, size: 16),
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

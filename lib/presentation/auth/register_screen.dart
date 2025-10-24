@@ -1,209 +1,132 @@
+
+import 'package:e_commerce/presentation/auth/bloc/auth_bloc.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/main/main_screen.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:e_commerce/presentation/widgets/app_text_field.dart';
-import 'package:flutter/gestures.dart';
+import 'package:e_commerce/presentation/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final appColors = theme.extension<AppColorsExtension>()!;
+    final textTheme = theme.textTheme;
 
     return Scaffold(
-      body: Stack(
-        children: [
-          // Decorative background element
-          Positioned(
-            top: -100,
-            left: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: theme.primaryColor.withOpacity(0.1),
-              ),
-            ).animate().scale(delay: 200.ms, duration: 1500.ms, curve: Curves.easeOutCubic),
-          ),
-
-          // Main content
-          SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      appBar: AppBar(),
+      body: SafeArea(
+        child: BlocConsumer<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is AuthFailure) {
+              AppToast.show(context, state.message);
+            }
+            if (state is AuthSuccess) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const MainScreen()),
+              );
+            }
+          },
+          builder: (context, state) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 60),
-                    const _Header(),
+                    Text('Create an Account', style: textTheme.headlineLarge),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Let\'s get you started!',
+                      style: textTheme.bodyLarge?.copyWith(color: appColors.textIconsTertiary),
+                    ),
                     const SizedBox(height: 40),
-                    const _RegisterForm(),
-                    const SizedBox(height: 32),
-                    const _PrimaryActions(),
-                    const SizedBox(height: 32),
-                    const _SocialLogins(),
+                    Text('Name', style: textTheme.labelLarge),
+                    const SizedBox(height: 8),
+                    AppTextField(
+                      controller: _nameController,
+                      labelText: 'Enter your name',
+                      prefixIcon: const Icon(Icons.person_outline),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    Text('Email', style: textTheme.labelLarge),
+                    const SizedBox(height: 8),
+                    AppTextField(
+                      controller: _emailController,
+                      labelText: 'Enter your email',
+                      prefixIcon: const Icon(Icons.email_outlined),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!value.contains('@')) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    Text('Password', style: textTheme.labelLarge),
+                    const SizedBox(height: 8),
+                    AppTextField(
+                      controller: _passwordController,
+                      labelText: 'Enter your password',
+                      prefixIcon: const Icon(Icons.lock_outline),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(height: 40),
-                    const _LoginRedirect(),
-                    const SizedBox(height: 20),
-                  ]
-                      .animate(interval: 100.ms)
-                      .fade(duration: 600.ms, curve: Curves.easeOutCubic)
-                      .slideY(begin: 0.5, curve: Curves.easeOutCubic),
+                    AppButton(
+                      text: 'Create Account',
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          context.read<AuthBloc>().add(
+                                RegisterRequested(
+                                  name: _nameController.text,
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                ),
+                              );
+                        }
+                      },
+                      isLoading: state is AuthLoading,
+                      isFullWidth: true,
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
-    );
-  }
-}
-
-// --- Private Sub-Widgets for Cleaner Code ---
-
-class _Header extends StatelessWidget {
-  const _Header();
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Create Account', style: textTheme.headlineMedium),
-        const SizedBox(height: 8),
-        Text(
-          'Sign up to get started with Platini.',
-          style: textTheme.bodyLarge?.copyWith(
-            color: Theme.of(context).extension<AppColorsExtension>()!.textIconsTertiary,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _RegisterForm extends StatelessWidget {
-  const _RegisterForm();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        AppTextField(
-          labelText: 'Full Name',
-          prefixIcon: Icons.person_outline,
-        ),
-        SizedBox(height: 16),
-        AppTextField(
-          labelText: 'Email Address',
-          prefixIcon: Icons.email_outlined,
-        ),
-        SizedBox(height: 16),
-        AppTextField(
-          labelText: 'Password',
-          prefixIcon: Icons.lock_outline,
-        ),
-      ],
-    );
-  }
-}
-
-class _PrimaryActions extends StatelessWidget {
-  const _PrimaryActions();
-
-  @override
-  Widget build(BuildContext context) {
-    final appColors = Theme.of(context).extension<AppColorsExtension>()!;
-    return Column(
-      children: [
-        AppButton(
-          text: 'Sign Up',
-          onPressed: () {},
-          buttonType: AppButtonType.primary,
-          isFullWidth: true,
-        ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            const Expanded(child: Divider()),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'OR',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: appColors.textIconsQuaternary,
-                    ),
-              ),
-            ),
-            const Expanded(child: Divider()),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _SocialLogins extends StatelessWidget {
-  const _SocialLogins();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AppButton(
-          text: 'Continue with Google',
-          onPressed: () {},
-          buttonType: AppButtonType.secondary,
-          isFullWidth: true,
-          leadingIcon: SvgPicture.asset('assets/icons/google_logo.svg', width: 24),
-        ),
-        const SizedBox(height: 12),
-        AppButton(
-          text: 'Continue with Apple',
-          onPressed: () {},
-          buttonType: AppButtonType.secondary,
-          isFullWidth: true,
-          leadingIcon: SvgPicture.asset('assets/icons/apple_logo.svg', width: 24, colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSurface, BlendMode.srcIn)),
-        ),
-      ],
-    );
-  }
-}
-
-class _LoginRedirect extends StatelessWidget {
-  const _LoginRedirect();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final appColors = theme.extension<AppColorsExtension>()!;
-
-    return Text.rich(
-      TextSpan(
-        text: 'Already have an account? ',
-        style: textTheme.bodyMedium?.copyWith(color: appColors.textIconsTertiary),
-        children: [
-          TextSpan(
-            text: 'Log In',
-            style: textTheme.bodyMedium?.copyWith(
-              color: theme.primaryColor,
-              fontWeight: FontWeight.bold,
-            ),
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                Navigator.pop(context);
-              },
-          ),
-        ],
-      ),
-      textAlign: TextAlign.center,
     );
   }
 }

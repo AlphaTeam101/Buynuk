@@ -7,15 +7,15 @@ class AppTextField extends StatelessWidget {
     this.controller,
     this.labelText,
     this.prefixIcon,
+    this.suffixIcon,
     this.validator,
-    this.prefixIconColor,
     this.onChanged,
   });
 
   final TextEditingController? controller;
   final String? labelText;
-  final IconData? prefixIcon;
-  final Color? prefixIconColor;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
 
@@ -33,7 +33,8 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: textTheme.bodyMedium?.copyWith(color: appColors.textIconsTertiary),
-        prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: prefixIconColor) : null,
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
         
         // Border Styles
         enabledBorder: OutlineInputBorder(

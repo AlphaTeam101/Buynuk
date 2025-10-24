@@ -1,65 +1,62 @@
 import 'package:e_commerce/domain/cart/entities/cart_item.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce/presentation/cart/widgets/cart_item_card.dart';
+import 'package:e_commerce/presentation/checkout/checkout_screen.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
-class CartScreen extends StatefulWidget {
+class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
-
-  @override
-  State<CartScreen> createState() => _CartScreenState();
-}
-
-class _CartScreenState extends State<CartScreen> {
-  final GlobalKey<AnimatedListState> _animatedListKey = GlobalKey<AnimatedListState>();
-  List<CartItem> _cartItems = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _cartItems = List.from(context.read<CartBloc>().state.items);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocConsumer<CartBloc, CartState>(
-          listener: (context, state) {
-            if (state.status == CartStatus.loaded || state.status == CartStatus.success) {
-              _updateAnimatedList(state.items);
-            }
-          },
+        child: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
             if (state.status == CartStatus.loading) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (state.items.isEmpty && _cartItems.isEmpty) {
+            if (state.items.isEmpty) {
               return const _EmptyCartBody();
             }
 
             return Stack(
               children: [
-                AnimatedList(
-                  key: _animatedListKey,
+                ListView.builder(
                   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 150.0),
-                  initialItemCount: _cartItems.length,
-                  itemBuilder: (context, index, animation) {
-                    final item = _cartItems[index];
-                    return SizeTransition(
-                      sizeFactor: animation,
-                      axisAlignment: -1.0,
-                      child: FadeTransition(
-                        opacity: animation,
-                        child: CartItemCard(key: ValueKey(item.product.id), item: item)
-                            .animate()
-                            .fade(duration: 500.ms, delay: (index * 100).ms)
-                            .slideX(begin: -0.2, curve: Curves.easeOutCubic),
+                  itemCount: state.items.length,
+                  itemBuilder: (context, index) {
+                    final item = state.items[index];
+                    return Slidable(
+                      key: ValueKey(item.product.id),
+                      endActionPane: ActionPane(
+                        motion: const BehindMotion(),
+                        extentRatio: 0.25,
+                        dismissible: DismissiblePane(onDismissed: () {
+                          context.read<CartBloc>().add(CartItemRemoved(item.product.id));
+                        }),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                            child: SlidableAction(
+                              onPressed: (context) {
+                                context.read<CartBloc>().add(CartItemRemoved(item.product.id));
+                              },
+                              backgroundColor: Theme.of(context).colorScheme.error,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ],
                       ),
-                    );
+                      child: CartItemCard(item: item),
+                    ).animate().fade(duration: 500.ms, delay: (index * 100).ms).slideX(begin: -0.2, curve: Curves.easeOutCubic);
                   },
                 ),
                 Positioned(
@@ -74,51 +71,6 @@ class _CartScreenState extends State<CartScreen> {
         ),
       ),
     );
-  }
-
-  void _updateAnimatedList(List<CartItem> newItems) {
-    final oldItems = List<CartItem>.from(_cartItems);
-    final animatedListState = _animatedListKey.currentState;
-
-    for (int i = 0; i < oldItems.length; i++) {
-      final oldItem = oldItems[i];
-      if (!newItems.any((newItem) => newItem.product.id == oldItem.product.id)) {
-        final removedIndex = _cartItems.indexOf(oldItem);
-        if (removedIndex != -1) {
-          animatedListState?.removeItem(
-            removedIndex,
-            (context, animation) => SizeTransition(
-              sizeFactor: animation,
-              axisAlignment: -1.0,
-              child: FadeTransition(
-                opacity: animation,
-                child: CartItemCard(key: ValueKey(oldItem.product.id), item: oldItem),
-              ),
-            ),
-            duration: const Duration(milliseconds: 300),
-          );
-          _cartItems.removeAt(removedIndex);
-        }
-      }
-    }
-
-    for (int i = 0; i < newItems.length; i++) {
-      final newItem = newItems[i];
-      if (!oldItems.any((oldItem) => oldItem.product.id == newItem.product.id)) {
-        _cartItems.insert(i, newItem);
-        animatedListState?.insertItem(i, duration: const Duration(milliseconds: 300));
-      }
-    }
-
-    for (int i = 0; i < newItems.length; i++) {
-      final newItem = newItems[i];
-      final existingIndex = _cartItems.indexWhere((item) => item.product.id == newItem.product.id);
-      if (existingIndex != -1 && _cartItems[existingIndex] != newItem) {
-        _cartItems[existingIndex] = newItem;
-      }
-    }
-
-    _cartItems = List.from(newItems);
   }
 }
 
@@ -203,6 +155,7 @@ class _CheckoutBar extends StatelessWidget {
             child: AppButton(
               text: 'Checkout',
               onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CheckoutScreen()));
               },
             ),
           ),

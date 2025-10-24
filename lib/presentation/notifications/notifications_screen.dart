@@ -26,6 +26,7 @@ class NotificationModel {
   });
 }
 
+// Initial dummy data
 final List<NotificationModel> dummyNotifications = [
   NotificationModel(
     id: '1',
@@ -68,7 +69,6 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   late List<NotificationModel> _notifications;
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
@@ -77,22 +77,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   void _removeNotification(String id) {
-    final index = _notifications.indexWhere((notification) => notification.id == id);
-    if (index != -1) {
-      final removedItem = _notifications.removeAt(index);
-      _listKey.currentState?.removeItem(
-        index,
-        (context, animation) => FadeTransition(
-          opacity: animation,
-          child: SizeTransition(
-            sizeFactor: animation,
-            child: NotificationCard(notification: removedItem),
-          ),
-        ),
-        duration: const Duration(milliseconds: 300),
-      );
-      setState(() {}); // To rebuild and regroup if a whole group is removed
-    }
+    setState(() {
+      _notifications.removeWhere((notification) => notification.id == id);
+    });
   }
 
   @override
@@ -103,55 +90,51 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       appBar: AppBar(
         title: const Text('Notifications'),
       ),
-      body: AnimatedList(
-        key: _listKey,
-        initialItemCount: groupedNotifications.length,
-        itemBuilder: (context, index, animation) {
+      body: ListView.builder(
+        itemCount: groupedNotifications.length,
+        itemBuilder: (context, index) {
           final group = groupedNotifications[index];
-          return FadeTransition(
-            opacity: animation,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Text(
-                    group.title,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-                  ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
+                child: Text(
+                  group.title,
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                ...group.notifications.map((notification) {
-                  return Slidable(
-                    key: ValueKey(notification.id),
-                    endActionPane: ActionPane(
-                      motion: const BehindMotion(),
-                      extentRatio: 0.25,
-                      dismissible: DismissiblePane(onDismissed: () {
-                        HapticFeedback.mediumImpact();
-                        _removeNotification(notification.id);
-                      }),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: SlidableAction(
-                            onPressed: (context) {
-                              HapticFeedback.mediumImpact();
-                              _removeNotification(notification.id);
-                            },
-                            backgroundColor: Theme.of(context).colorScheme.error,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+              ),
+              ...group.notifications.map((notification) {
+                return Slidable(
+                  key: ValueKey(notification.id),
+                  endActionPane: ActionPane(
+                    motion: const BehindMotion(),
+                    extentRatio: 0.25,
+                    dismissible: DismissiblePane(onDismissed: () {
+                      HapticFeedback.mediumImpact();
+                      _removeNotification(notification.id);
+                    }),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                        child: SlidableAction(
+                          onPressed: (context) {
+                            HapticFeedback.mediumImpact();
+                            _removeNotification(notification.id);
+                          },
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: 'Delete',
+                          borderRadius: BorderRadius.circular(16),
                         ),
-                      ],
-                    ),
-                    child: NotificationCard(notification: notification),
-                  );
-                }).toList(),
-              ],
-            ),
+                      ),
+                    ],
+                  ),
+                  child: NotificationCard(notification: notification),
+                ).animate().fadeIn(duration: 400.ms);
+              }).toList(),
+            ],
           );
         },
       ),
@@ -182,7 +165,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       grouped[groupTitle]!.add(notification);
     }
 
-    return grouped.entries.map((entry) => _NotificationGroup(title: entry.key, notifications: entry.value)).where((group) => group.notifications.isNotEmpty).toList();
+    return grouped.entries
+        .map((entry) => _NotificationGroup(title: entry.key, notifications: entry.value))
+        .where((group) => group.notifications.isNotEmpty)
+        .toList();
   }
 }
 
