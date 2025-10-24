@@ -7,6 +7,7 @@ import 'package:e_commerce/domain/auth/repositories/auth_repository.dart';
 import 'package:e_commerce/logic/theme/theme_bloc.dart';
 import 'package:e_commerce/logic/theme/theme_event.dart';
 import 'package:e_commerce/logic/theme/theme_state.dart';
+import 'package:e_commerce/presentation/auth/bloc/login_bloc.dart';
 import 'package:e_commerce/presentation/auth/login_screen.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce/presentation/main/main_screen.dart';
