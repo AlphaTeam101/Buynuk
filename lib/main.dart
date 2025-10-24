@@ -33,6 +33,12 @@ void main() async {
   // Initialize CartLocalDataSource (which opens the Hive box)
   await getIt<CartLocalDataSource>().init();
 
+  // --- TEMPORARY: Clear tokens for fresh start testing ---
+  // In a real app, you'd check token validity, not clear it every time.
+  final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  await secureStorage.deleteAll(); // Clears all stored data
+  // --------------------------------------------------------
+
   final authRepository = getIt<AuthRepository>();
   final userOrError = await authRepository.getProfile();
 
