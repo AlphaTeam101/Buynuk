@@ -1,5 +1,6 @@
 
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/widgets/app_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -163,7 +164,16 @@ class _DriverInfo extends StatelessWidget {
               scheme: 'tel',
               path: '01015497697',
             );
-            await launchUrl(launchUri);
+            if (await canLaunchUrl(launchUri)) {
+              await launchUrl(launchUri);
+            } else {
+              AppToast.show(
+                context: context,
+                title: 'Could not launch dialer',
+                message: 'This feature is not available on this device.',
+                type: ToastType.error,
+              );
+            }
           },
           icon: const Icon(Icons.call, color: Colors.green),
           iconSize: 28,
