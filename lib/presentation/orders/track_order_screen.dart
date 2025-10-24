@@ -151,7 +151,7 @@ class _DriverInfo extends StatelessWidget {
         const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('John Doe', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text('Ahmed Amin', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             SizedBox(height: 4),
             Text('Delivery Driver', style: TextStyle(color: Colors.grey)),
           ],
