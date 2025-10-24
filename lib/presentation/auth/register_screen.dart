@@ -1,7 +1,7 @@
 
 import 'package:e_commerce/presentation/auth/bloc/register_bloc.dart';
-import 'package:e_commerce/presentation/design_system/animated_bubbles_background.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/corner_circle_animation.dart';
 import 'package:e_commerce/presentation/main/main_screen.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:e_commerce/presentation/widgets/app_text_field.dart';
@@ -16,8 +16,35 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.5),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOut,
+    ));
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
+    ));
+
+    _animationController.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +53,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      appBar: AppBar(),
-      body: AnimatedBubblesBackground(
+      // Removed AppBar to make it full screen
+      body: CornerCircleAnimation(
         child: SafeArea(
           child: BlocProvider(
             create: (context) => RegisterBloc(),
@@ -55,76 +82,130 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Create an Account', style: textTheme.headlineLarge),
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: Text('Create an Account', style: textTheme.headlineLarge),
+                          ),
+                        ),
                         const SizedBox(height: 8),
-                        Text(
-                          'Let\'s get you started!',
-                          style: textTheme.bodyLarge?.copyWith(color: appColors.textIconsTertiary),
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: Text(
+                              'Let\'s get you started!',
+                              style: textTheme.bodyLarge?.copyWith(color: appColors.textIconsTertiary),
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 40),
-                        Text('Name', style: textTheme.labelLarge),
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: Text('Name', style: textTheme.labelLarge),
+                          ),
+                        ),
                         const SizedBox(height: 8),
-                        AppTextField(
-                          labelText: 'Enter your name',
-                          prefixIcon: const Icon(Icons.person_outline),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your name';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            context.read<RegisterBloc>().add(RegisterNameChanged(value));
-                          },
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: AppTextField(
+                              labelText: 'Enter your name',
+                              prefixIcon: const Icon(Icons.person_outline),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                context.read<RegisterBloc>().add(RegisterNameChanged(value));
+                              },
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 24),
-                        Text('Email', style: textTheme.labelLarge),
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: Text('Email', style: textTheme.labelLarge),
+                          ),
+                        ),
                         const SizedBox(height: 8),
-                        AppTextField(
-                          labelText: 'Enter your email',
-                          prefixIcon: const Icon(Icons.email_outlined),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            if (!value.contains('@')) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            context.read<RegisterBloc>().add(RegisterEmailChanged(value));
-                          },
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: AppTextField(
+                              labelText: 'Enter your email',
+                              prefixIcon: const Icon(Icons.email_outlined),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your email';
+                                }
+                                if (!value.contains('@')) {
+                                  return 'Please enter a valid email';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                context.read<RegisterBloc>().add(RegisterEmailChanged(value));
+                              },
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 24),
-                        Text('Password', style: textTheme.labelLarge),
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: Text('Password', style: textTheme.labelLarge),
+                          ),
+                        ),
                         const SizedBox(height: 8),
-                        AppTextField(
-                          labelText: 'Enter your password',
-                          prefixIcon: const Icon(Icons.lock_outline),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            context.read<RegisterBloc>().add(RegisterPasswordChanged(value));
-                          },
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: AppTextField(
+                              labelText: 'Enter your password',
+                              prefixIcon: const Icon(Icons.lock_outline),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter your password';
+                                }
+                                if (value.length < 6) {
+                                  return 'Password must be at least 6 characters';
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                context.read<RegisterBloc>().add(RegisterPasswordChanged(value));
+                              },
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 40),
-                        AppButton(
-                          text: 'Create Account',
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<RegisterBloc>().add(RegisterSubmitted());
-                            }
-                          },
-                          isLoading: state.status == RegisterStatus.loading,
-                          isFullWidth: true,
+                        FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: SlideTransition(
+                            position: _slideAnimation,
+                            child: AppButton(
+                              text: 'Create Account',
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<RegisterBloc>().add(RegisterSubmitted());
+                                }
+                              },
+                              isLoading: state.status == RegisterStatus.loading,
+                              isFullWidth: true,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -136,5 +217,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

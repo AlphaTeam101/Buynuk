@@ -13,7 +13,7 @@ class AnimatedBubblesBackground extends StatefulWidget {
 
 class _AnimatedBubblesBackgroundState extends State<AnimatedBubblesBackground> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late List<Bubble> _bubbles;
+  List<Bubble> _bubbles = []; // Initialize as an empty list
   final int numberOfBubbles = 10;
 
   @override
@@ -24,7 +24,14 @@ class _AnimatedBubblesBackgroundState extends State<AnimatedBubblesBackground> w
       vsync: this,
     )..repeat();
 
-    _bubbles = List.generate(numberOfBubbles, (index) => Bubble());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final size = MediaQuery.of(context).size;
+        setState(() {
+          _bubbles = List.generate(numberOfBubbles, (index) => Bubble(size.width, size.height));
+        });
+      }
+    });
   }
 
   @override
@@ -32,6 +39,10 @@ class _AnimatedBubblesBackgroundState extends State<AnimatedBubblesBackground> w
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
+        if (_bubbles.isEmpty) {
+          // If bubbles are not yet initialized, just return the child for now
+          return widget.child;
+        }
         _updateBubbles();
         return CustomPaint(
           painter: BubblesPainter(bubbles: _bubbles),
@@ -43,10 +54,12 @@ class _AnimatedBubblesBackgroundState extends State<AnimatedBubblesBackground> w
   }
 
   void _updateBubbles() {
+    if (_bubbles.isEmpty) return; // Prevent updating if not initialized
+    final size = MediaQuery.of(context).size;
     for (var bubble in _bubbles) {
       bubble.y -= bubble.speed;
       if (bubble.y < -bubble.size) {
-        bubble.reset(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height);
+        bubble.reset(size.width, size.height);
       }
     }
   }
@@ -66,8 +79,8 @@ class Bubble {
   late Color color;
   late double opacity;
 
-  Bubble() {
-    reset(0, 0); // Initial reset, will be updated with actual screen size
+  Bubble(double screenWidth, double screenHeight) {
+    reset(screenWidth, screenHeight);
   }
 
   void reset(double screenWidth, double screenHeight) {
