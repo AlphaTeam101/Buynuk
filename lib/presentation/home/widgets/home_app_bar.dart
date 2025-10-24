@@ -54,11 +54,40 @@ class HomeAppBar extends StatelessWidget {
         ),
       ),
       actions: [
-        IconButton(
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NotificationsScreen()));
-          },
-          icon: Icon(Icons.notifications_outlined, color: theme.colorScheme.onSurface, size: 28),
+        Stack(
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NotificationsScreen()));
+              },
+              icon: Icon(Icons.notifications_outlined, color: theme.colorScheme.onSurface, size: 28),
+            ),
+            Positioned(
+              right: 8,
+              top: 8,
+              child: Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.error,
+                  shape: BoxShape.circle,
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 18,
+                  minHeight: 18,
+                ),
+                child: const Center(
+                  child: Text(
+                    '2',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         const SizedBox(width: 8), // Give some space from the edge
       ],
