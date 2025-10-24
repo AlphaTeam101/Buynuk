@@ -53,7 +53,15 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
     final textTheme = theme.textTheme;
 
     return Scaffold(
-      // Removed AppBar to make it full screen
+      extendBodyBehindAppBar: true, // Allows the body to extend behind the app bar
+      appBar: AppBar(
+        backgroundColor: Colors.transparent, // Make app bar transparent
+        elevation: 0, // Remove shadow
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: theme.primaryColor), // Customize back button color
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: CornerCircleAnimation(
         child: SafeArea(
           child: BlocProvider(
