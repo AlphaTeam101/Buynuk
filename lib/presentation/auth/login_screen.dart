@@ -1,5 +1,5 @@
 
-import 'package:e_commerce/presentation/auth/bloc/auth_bloc.dart';
+import 'package:e_commerce/presentation/auth/bloc/login_bloc.dart';
 import 'package:e_commerce/presentation/auth/register_screen.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:e_commerce/presentation/main/main_screen.dart';
@@ -18,8 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +27,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: BlocConsumer<AuthBloc, AuthState>(
+        child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
-            if (state is AuthFailure) {
-              AppToast.show(context, state.message);
+            if (state.status == LoginStatus.failure) {
+              AppToast.show(
+                context: context,
+                title: 'Login Failed',
+                message: state.errorMessage,
+                type: ToastType.error,
+              );
             }
-            if (state is AuthSuccess) {
+            if (state.status == LoginStatus.success) {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const MainScreen()),
               );
@@ -59,11 +62,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text('Email', style: textTheme.labelLarge),
                     const SizedBox(height: 8),
                     AppTextField(
-                      controller: _emailController,
                       labelText: 'Enter your email',
                       prefixIcon: Icon(
                         Icons.email_outlined,
-                        color: _emailController.text.isEmpty ? appColors.textIconsTertiary : theme.primaryColor,
+                        color: state.email.isEmpty ? appColors.textIconsTertiary : theme.primaryColor,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -74,17 +76,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
-                      onChanged: (value) => setState(() {}),
+                      onChanged: (value) {
+                        context.read<LoginBloc>().add(LoginEmailChanged(value));
+                      },
                     ),
                     const SizedBox(height: 24),
                     Text('Password', style: textTheme.labelLarge),
                     const SizedBox(height: 8),
                     AppTextField(
-                      controller: _passwordController,
                       labelText: 'Enter your password',
                       prefixIcon: Icon(
                         Icons.lock_outline,
-                        color: _passwordController.text.isEmpty ? appColors.textIconsTertiary : theme.primaryColor,
+                        color: state.password.isEmpty ? appColors.textIconsTertiary : theme.primaryColor,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -92,22 +95,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
-                      onChanged: (value) => setState(() {}),
+                      onChanged: (value) {
+                        context.read<LoginBloc>().add(LoginPasswordChanged(value));
+                      },
                     ),
                     const SizedBox(height: 40),
                     AppButton(
                       text: 'Login',
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(
-                                LoginRequested(
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                ),
-                              );
+                          context.read<LoginBloc>().add(LoginSubmitted());
                         }
                       },
-                      isLoading: state is AuthLoading,
+                      isLoading: state.status == LoginStatus.loading,
                       isFullWidth: true,
                     ),
                     const SizedBox(height: 24),
