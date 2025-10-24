@@ -135,25 +135,25 @@ class AppTheme {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     primaryColor: AppColors.brandPrimary,
-    scaffoldBackgroundColor: AppColors.surfacePrimaryDark,
+    scaffoldBackgroundColor: const Color(0xFF121212), // Dark grey background
     colorScheme: const ColorScheme.dark(
       primary: AppColors.brandPrimary,
       secondary: AppColors.brandSecondary,
-      surface: AppColors.surfacePrimaryDark,
-      onSurface: AppColors.textIconsPrimary, // Text on surface
+      surface: Color(0xFF1E1E1E), // Slightly lighter surface color
+      onSurface: Color(0xFFE0E0E0), // High-emphasis text
       error: AppColors.feedbackError,
     ),
-    textTheme: _buildTextTheme(AppColors.textIconsPrimary),
-    extensions: const <ThemeExtension<dynamic>>[
+    textTheme: _buildTextTheme(const Color(0xFFE0E0E0)), // High-emphasis text
+    extensions: <ThemeExtension<dynamic>>[
       AppColorsExtension(
         brandSecondary: AppColors.brandSecondary,
-        brandTertiary: AppColors.brandTertiary,
-        surfaceSecondary: AppColors.surfaceSecondary,
-        surfaceTertiary: AppColors.surfaceTertiary,
-        surfaceQuaternary: AppColors.surfaceQuaternary,
-        textIconsSecondary: AppColors.textIconsSecondary,
-        textIconsTertiary: AppColors.textIconsTertiary,
-        textIconsQuaternary: AppColors.textIconsQuaternary,
+        brandTertiary: AppColors.brandTertiary.withOpacity(0.5),
+        surfaceSecondary: const Color(0xFF1E1E1E),
+        surfaceTertiary: const Color(0xFF2C2C2C),
+        surfaceQuaternary: const Color(0xFF3A3A3A),
+        textIconsSecondary: const Color(0xFFBDBDBD), // Medium-emphasis text
+        textIconsTertiary: const Color(0xFF9E9E9E), // Disabled/hint text
+        textIconsQuaternary: const Color(0xFF757575),
         feedbackSuccess: AppColors.feedbackSuccess,
         feedbackWarning: AppColors.feedbackWarning,
         feedbackInfo: AppColors.feedbackInfo,

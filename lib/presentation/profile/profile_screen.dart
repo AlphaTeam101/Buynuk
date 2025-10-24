@@ -1,3 +1,5 @@
+import 'package:e_commerce/logic/theme/theme_bloc.dart';
+import 'package:e_commerce/logic/theme/theme_event.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:e_commerce/presentation/profile/widgets/profile_header.dart';
 import 'package:e_commerce/presentation/profile/widgets/settings_list_item.dart';
@@ -5,6 +7,7 @@ import 'package:e_commerce/presentation/profile/widgets/settings_section.dart';
 import 'package:e_commerce/presentation/profile/widgets/settings_toggle_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -62,16 +65,13 @@ class ProfileScreen extends StatelessWidget {
                 title: "App Settings",
                 items: [
                   SettingsToggleItem(
-                    icon: Icons.notifications_none,
-                    label: "Notifications",
-                    value: true, // Example value
+                    icon: Icons.dark_mode_outlined,
+                    label: "Dark Mode",
+                    value: Theme.of(context).brightness == Brightness.dark,
                     onChanged: (value) {
-                      // TODO: Handle notification toggle
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Notifications toggled to $value")));
+                      context.read<ThemeBloc>().add(ThemeChanged(value));
                     },
                   ),
-                  // Removed Language option as per request
                 ],
               )
                   .animate(delay: 200.ms) // Changed from interval to delay

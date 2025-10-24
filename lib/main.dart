@@ -4,12 +4,16 @@ import 'package:e_commerce/data/cart/models/cart_item_model.dart';
 import 'package:e_commerce/data/categories/models/category_model.dart';
 import 'package:e_commerce/data/products/models/product_model.dart';
 import 'package:e_commerce/domain/auth/repositories/auth_repository.dart';
-import 'package:e_commerce/presentation/auth/login_page.dart';
+import 'package:e_commerce/logic/theme/theme_bloc.dart';
+import 'package:e_commerce/logic/theme/theme_event.dart';
+import 'package:e_commerce/logic/theme/theme_state.dart';
+import 'package:e_commerce/presentation/auth/login_screen.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce/presentation/main/main_screen.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -36,19 +40,30 @@ void main() async {
 
   // If the user is authenticated, go to the MainScreen, otherwise go to LoginPage.
   final Widget initialScreen = userOrError.fold(
-    (error) => const LoginPage(),
+    (error) => const LoginScreen(),
     (user) => const MainScreen(),
   );
 
-  runApp(BlocProvider<CartBloc>.value(
-    value: cartBlocInstance,
-    child: MaterialApp(
-      title: 'Platini Store',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      home: initialScreen,
-      debugShowCheckedModeBanner: false,
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<CartBloc>.value(value: cartBlocInstance),
+        BlocProvider<ThemeBloc>(
+          create: (context) => ThemeBloc(const FlutterSecureStorage())..add(ThemeLoaded()),
+        ),
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Platini Store',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: state.themeMode,
+            home: initialScreen,
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     ),
-  ));
+  );
 }
