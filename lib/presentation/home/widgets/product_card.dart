@@ -92,26 +92,26 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.4),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.favorite_border,
-                          color: AppColors.textIconsOnDark,
+                          color: AppColors.textIconsPrimary,
                           size: 20,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.4),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.visibility_outlined,
-                          color: AppColors.textIconsOnDark,
+                          color: AppColors.textIconsPrimary,
                           size: 20,
                         ),
                       ),
@@ -137,7 +137,6 @@ class ProductCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       decoration: const BoxDecoration(
                         color: AppColors.textIconsPrimary, // Black bar
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(15.0)),
                       ),
                       child: const Center(
                         child: Text(
@@ -168,7 +167,7 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '\$960.00', // Static price
+                        '\$300.00', // Static price
                         style: textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.feedbackError,
@@ -176,7 +175,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        '\$1160.00', // Static original price
+                        '\$360.00', // Static original price
                         style: textTheme.bodySmall?.copyWith(
                           color: AppColors.textIconsSecondary,
                           decoration: TextDecoration.lineThrough,
@@ -188,14 +187,13 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const Icon(Icons.star_half, color: Colors.amber, size: 16),
                       const SizedBox(width: 4),
                       Text(
-                        '4.0', // Static rating
-                        style: textTheme.bodySmall?.copyWith(color: AppColors.textIconsSecondary, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        '(75)', // Static review count
+                        '(44)', // Static review count
                         style: textTheme.bodySmall?.copyWith(color: AppColors.textIconsSecondary),
                       ),
                     ],

@@ -94,11 +94,13 @@ class _HomeViewState extends State<_HomeView> {
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               ProductGrid(products: state.products.skip(7).take(4).toList()),
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
+              const SliverToBoxAdapter(child: _MusicExperienceCard()),
+              const SliverToBoxAdapter(child: SizedBox(height: 24)),
               _buildSectionHeader(context, "Featured", isFeatured: true),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
               SliverToBoxAdapter(child: FeaturedCard(
                 title: 'ASUS FHD Gaming Laptop',
-                subtitle: 'High-performance gaming laptop with the latest specs.',
+                subtitle: 'High-performance gaming experience',
                 buttonText: "Shop Now",
                 imageUrl: state.products.isNotEmpty && state.products[0].images.isNotEmpty ? state.products[0].images.first : 'https://placehold.co/600x200/212121/FFFFFF?text=Gaming+Laptop',
                 isWide: true,
@@ -111,7 +113,7 @@ class _HomeViewState extends State<_HomeView> {
                   children: [
                     Expanded(child: FeaturedCard(
                       title: 'Wireless Headphones',
-                      subtitle: 'Immersive sound experience, all day comfort.',
+                      subtitle: 'Immersive sound, all-day comfort.',
                       buttonText: "Shop Now",
                       imageUrl: state.products.length > 1 && state.products[1].images.isNotEmpty ? state.products[1].images.first : 'https://placehold.co/300x400/212121/FFFFFF?text=Headphones',
                       isWide: false,
@@ -214,6 +216,97 @@ class _TopFlashSaleBanner extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _MusicExperienceCard extends StatelessWidget {
+  const _MusicExperienceCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: AppColors.surfaceDark,
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Enhance Your Music Experience',
+                style: textTheme.headlineSmall?.copyWith(
+                  color: AppColors.textIconsOnDark,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  _buildTimerBox('06', 'Days'),
+                  const SizedBox(width: 10),
+                  _buildTimerBox('18', 'Hours'),
+                  const SizedBox(width: 10),
+                  _buildTimerBox('46', 'Mins'),
+                  const SizedBox(width: 10),
+                  _buildTimerBox('22', 'Secs'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.brandPrimary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: Text(
+                  'Check it out!',
+                  style: textTheme.bodyMedium?.copyWith(
+                    color: AppColors.textIconsOnDark,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimerBox(String time, String label) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: AppColors.textIconsOnDark,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Text(
+            time,
+            style: const TextStyle(
+              color: AppColors.textIconsPrimary,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: const TextStyle(color: AppColors.textIconsOnDark, fontSize: 12),
+        ),
+      ],
     );
   }
 }

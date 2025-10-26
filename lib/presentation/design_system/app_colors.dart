@@ -30,9 +30,4 @@ class AppColors {
   static const Color feedbackWarning = Color(0xFFF5A623); // Orange
   static const Color feedbackError = Color(0xFFD0021B);   // Red for errors and Flash Sales
   static const Color feedbackInfo = Color(0xFF4A90E2);    // Blue
-
-  // Opacity & Tint
-  static const Color surfaceTint = Color(0x334A90E2);
-  static const Color surfaceOpacity10 = Color(0x1A4A90E2);
-  static const Color surfaceOpacity08 = Color(0x144A90E2);
 }
