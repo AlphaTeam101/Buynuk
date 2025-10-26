@@ -20,6 +20,7 @@ class AppButton extends StatelessWidget {
     this.isFullWidth = false,
     this.textStyle,
     this.padding,
+    this.backgroundColor,
   });
 
   final VoidCallback? onPressed;
@@ -30,6 +31,7 @@ class AppButton extends StatelessWidget {
   final bool isFullWidth;
   final TextStyle? textStyle;
   final EdgeInsetsGeometry? padding;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class AppButton extends StatelessWidget {
     final appColors = theme.extension<AppColorsExtension>()!;
     final textTheme = theme.textTheme;
 
-    Color backgroundColor;
+    Color buttonBackgroundColor;
     Color foregroundColor;
     Color disabledBackgroundColor;
     Color disabledForegroundColor;
@@ -45,27 +47,27 @@ class AppButton extends StatelessWidget {
 
     switch (buttonType) {
       case AppButtonType.primary:
-        backgroundColor = theme.primaryColor;
-        foregroundColor = AppColors.textIconsPrimary;
+        buttonBackgroundColor = backgroundColor ?? theme.primaryColor;
+        foregroundColor = AppColors.textIconsOnDark;
         disabledBackgroundColor = appColors.surfaceQuaternary!;
         disabledForegroundColor = appColors.textIconsTertiary!;
         break;
       case AppButtonType.secondary:
-        backgroundColor = appColors.surfaceSecondary!;
+        buttonBackgroundColor = backgroundColor ?? appColors.surfaceSecondary!;
         foregroundColor = appColors.textIconsSecondary!.withOpacity(0.8);
         disabledBackgroundColor = appColors.surfaceQuaternary!;
         disabledForegroundColor = appColors.textIconsTertiary!;
         borderSide = BorderSide(color: appColors.surfaceQuaternary!, width: 1.5);
         break;
       case AppButtonType.tertiary:
-        backgroundColor = Colors.transparent;
+        buttonBackgroundColor = backgroundColor ?? Colors.transparent;
         foregroundColor = theme.primaryColor;
         disabledBackgroundColor = Colors.transparent;
         disabledForegroundColor = appColors.textIconsTertiary!;
         break;
       case AppButtonType.destructive:
-        backgroundColor = appColors.paletteRed100!;
-        foregroundColor = AppColors.textIconsPrimary;
+        buttonBackgroundColor = backgroundColor ?? appColors.paletteRed100!;
+        foregroundColor = AppColors.textIconsOnDark;
         disabledBackgroundColor = appColors.surfaceQuaternary!;
         disabledForegroundColor = appColors.textIconsTertiary!;
         break;
@@ -93,7 +95,7 @@ class AppButton extends StatelessWidget {
           );
 
     final buttonStyle = ElevatedButton.styleFrom(
-      backgroundColor: backgroundColor,
+      backgroundColor: buttonBackgroundColor,
       foregroundColor: foregroundColor,
       disabledBackgroundColor: disabledBackgroundColor,
       disabledForegroundColor: disabledForegroundColor,

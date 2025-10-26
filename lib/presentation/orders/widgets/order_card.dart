@@ -95,7 +95,7 @@ class _OrderCardHeader extends StatelessWidget {
             Text(DateFormat('MMM d, yyyy').format(order.date), style: textTheme.bodyMedium?.copyWith(color: appColors.textIconsSecondary)),
           ],
         ),
-        Text('\$${order.total.toStringAsFixed(2)}', style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+        Text('${order.total.toStringAsFixed(2)} SAR', style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
       ],
     );
   }

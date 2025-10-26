@@ -53,7 +53,7 @@ class CheckoutBottomSheet extends StatelessWidget {
             children: [
               Text('Total Price', style: textTheme.titleLarge),
               Text(
-                '\$${state.subtotal.toStringAsFixed(2)}',
+                '${state.subtotal.toStringAsFixed(2)} SAR',
                 style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: theme.primaryColor),
               ),
             ],
@@ -83,7 +83,7 @@ class _SummaryRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7))),
-        Text('\$${value.toStringAsFixed(2)}', style: textTheme.bodyLarge),
+        Text('${value.toStringAsFixed(2)} SAR', style: textTheme.bodyLarge),
       ],
     );
   }

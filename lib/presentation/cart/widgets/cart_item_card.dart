@@ -1,6 +1,6 @@
 import 'package:e_commerce/domain/cart/entities/cart_item.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
-import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,15 +11,13 @@ class CartItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final appColors = theme.extension<AppColorsExtension>()!;
+    final textTheme = Theme.of(context).textTheme;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
       elevation: 0,
-      color: appColors.surfaceSecondary,
+      color: AppColors.surfaceSecondary,
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
@@ -40,11 +38,19 @@ class CartItemCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.product.title, style: textTheme.titleMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                  Text(
+                    item.product.title,
+                    style: textTheme.titleMedium?.copyWith(color: AppColors.textIconsPrimary),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   const SizedBox(height: 8),
                   Text(
-                    '\$${item.product.price.toDouble().toStringAsFixed(2)}',
-                    style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                    '${item.product.price.toDouble().toStringAsFixed(2)} SAR',
+                    style: textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textIconsPrimary,
+                    ),
                   ),
                 ],
               ),
@@ -73,11 +79,10 @@ class _QuantityControls extends StatelessWidget {
             if (item.quantity > 1) {
               cartBloc.add(CartItemQuantityUpdated(item.product.id, item.quantity - 1));
             } else {
-              // Optional: Show a confirmation dialog before removing
               cartBloc.add(CartItemRemoved(item.product.id));
             }
           },
-          icon: const Icon(Icons.remove_circle_outline),
+          icon: const Icon(Icons.remove_circle_outline, color: AppColors.textIconsSecondary),
         ),
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
@@ -86,15 +91,15 @@ class _QuantityControls extends StatelessWidget {
           },
           child: Text(
             item.quantity.toString(),
-            key: ValueKey<int>(item.quantity), // Keyed by quantity for animation
-            style: Theme.of(context).textTheme.titleMedium,
+            key: ValueKey<int>(item.quantity),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textIconsPrimary),
           ),
         ),
         IconButton(
           onPressed: () {
             cartBloc.add(CartItemQuantityUpdated(item.product.id, item.quantity + 1));
           },
-          icon: const Icon(Icons.add_circle_outline),
+          icon: const Icon(Icons.add_circle_outline, color: AppColors.textIconsSecondary),
         ),
       ],
     );

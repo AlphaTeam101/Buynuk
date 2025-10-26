@@ -48,7 +48,7 @@ class ProductCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '\$${product.price}',
+                  '${product.price} SAR',
                   style: textTheme.titleSmall?.copyWith(
                     color: theme.colorScheme.secondary,
                     fontWeight: FontWeight.bold,

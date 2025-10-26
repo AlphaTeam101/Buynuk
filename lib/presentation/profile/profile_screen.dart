@@ -1,6 +1,6 @@
 import 'package:e_commerce/logic/theme/theme_bloc.dart';
 import 'package:e_commerce/logic/theme/theme_event.dart';
-import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:e_commerce/presentation/profile/widgets/profile_header.dart';
 import 'package:e_commerce/presentation/profile/widgets/settings_list_item.dart';
 import 'package:e_commerce/presentation/profile/widgets/settings_section.dart';
@@ -15,6 +15,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Profile', style: TextStyle(color: AppColors.textIconsPrimary)),
+        backgroundColor: AppColors.surfacePrimary,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -124,14 +129,11 @@ class _LogoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme; // Use colorScheme
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: colorScheme.surface, // Use colorScheme.surface
+          color: AppColors.surfaceSecondary,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: SettingsListItem(
@@ -142,8 +144,8 @@ class _LogoutButton extends StatelessWidget {
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("Log Out tapped")));
           },
-          labelColor: colorScheme.error, // Use colorScheme.error
-          iconColor: colorScheme.error, // Use colorScheme.error
+          labelColor: AppColors.feedbackError,
+          iconColor: AppColors.feedbackError,
         ),
       ),
     );

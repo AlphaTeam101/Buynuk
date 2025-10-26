@@ -1,4 +1,4 @@
-import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -7,9 +7,7 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final appColors = theme.extension<AppColorsExtension>()!;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
@@ -20,29 +18,29 @@ class ProfileHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "John", // User's name
+                  "Ahmed Ali", // User's name
                   style: textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.normal,
-                    color: theme.colorScheme.onSurface, // Corrected
+                    color: AppColors.textIconsPrimary,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "+9647734123440", // Phone number
+                  "+966773413440", // Phone number
                   style: textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.7), // Corrected
+                    color: AppColors.textIconsSecondary,
                   ),
                 ),
               ],
             ),
           ),
-          CircleAvatar(
+          const CircleAvatar(
             radius: 30,
-            backgroundColor: appColors.surfaceSecondary, // This is defined in AppColorsExtension
+            backgroundColor: AppColors.surfaceSecondary,
             child: Icon(
               Icons.person,
               size: 30,
-              color: appColors.textIconsSecondary, // Corrected to use an existing text/icon color
+              color: AppColors.textIconsSecondary,
             ),
           ),
         ],

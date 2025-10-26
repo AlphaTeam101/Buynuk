@@ -115,8 +115,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               max: 5000,
               divisions: 50,
               labels: RangeLabels(
-                '\$${_currentRangeValues.start.round().toString()}',
-                '\$${_currentRangeValues.end.round().toString()}',
+                '${_currentRangeValues.start.round().toString()} SAR',
+                '${_currentRangeValues.end.round().toString()} SAR',
               ),
               onChanged: (RangeValues values) {
                 setState(() {

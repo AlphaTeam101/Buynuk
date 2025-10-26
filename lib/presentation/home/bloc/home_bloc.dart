@@ -10,8 +10,7 @@ import '../../../domain/products/usecases/get_products_usecase.dart';
 part 'home_event.dart';
 part 'home_state.dart';
 
-const _kProductLimit = 10;
-const _kCategoryToFilter = 'Electronics';
+const _kProductLimit = 20; // Increased limit to get more products to filter from
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetCategoriesUseCase _getCategoriesUseCase;
@@ -30,7 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     final results = await Future.wait([
       _getCategoriesUseCase(),
-      _getProductsUseCase(offset: 0, limit: _kProductLimit, category: _kCategoryToFilter),
+      _getProductsUseCase(offset: 0, limit: _kProductLimit),
     ]);
 
     final categoriesResult = results[0] as Either<String, List<Category>>;
@@ -41,12 +40,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       (categories) {
         productsResult.fold(
           (error) => emit(state.copyWith(status: HomeStatus.failure, errorMessage: error)),
-          (products) => emit(state.copyWith(
-            status: HomeStatus.success,
-            categories: categories,
-            products: products,
-            hasReachedMaxProducts: products.length < _kProductLimit,
-          )),
+          (products) {
+            // Filter for electronics products
+            final electronicsProducts = products.where((p) => p.category.slug == 'electronics').toList();
+            emit(state.copyWith(
+              status: HomeStatus.success,
+              categories: categories,
+              products: electronicsProducts,
+              hasReachedMaxProducts: products.length < _kProductLimit, // Base this on the original fetch
+            ));
+          },
         );
       },
     );
@@ -58,18 +61,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     if (state.hasReachedMaxProducts || state.status == HomeStatus.loading) return;
 
-    emit(state.copyWith(status: HomeStatus.loading)); // Visually indicates loading more
+    emit(state.copyWith(status: HomeStatus.loading));
 
     final result = await _getProductsUseCase(
-      offset: state.products.length,
+      offset: state.products.length, // The offset should be based on the total products fetched so far
       limit: _kProductLimit,
-      category: _kCategoryToFilter,
     );
 
     result.fold(
       (error) => emit(state.copyWith(status: HomeStatus.failure, errorMessage: error)),
       (newProducts) {
-        final allProducts = List<Product>.from(state.products)..addAll(newProducts);
+        // Filter new products for electronics
+        final newElectronics = newProducts.where((p) => p.category.slug == 'electronics').toList();
+        final allProducts = List<Product>.from(state.products)..addAll(newElectronics);
         emit(state.copyWith(
           status: HomeStatus.success,
           products: allProducts,

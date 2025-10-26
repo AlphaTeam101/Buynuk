@@ -63,7 +63,7 @@ class _OrderDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Total Price:', style: TextStyle(color: Colors.grey)),
-            Text('\$150.00', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text('150.00 SAR', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ],
         ),
       ],

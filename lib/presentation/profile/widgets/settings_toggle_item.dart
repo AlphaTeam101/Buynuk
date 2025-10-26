@@ -20,9 +20,7 @@ class SettingsToggleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final colorScheme = theme.colorScheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
@@ -30,14 +28,14 @@ class SettingsToggleItem extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: colorScheme.onSurface.withOpacity(0.8),
+            color: AppColors.textIconsSecondary,
             size: 24,
           ),
           const SizedBox(width: 16),
           Text(
             label,
             style: textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurface,
+              color: AppColors.textIconsPrimary,
             ),
           ),
           const Spacer(),
@@ -47,10 +45,10 @@ class SettingsToggleItem extends StatelessWidget {
               context.read<ThemeBloc>().add(ThemeChanged(newValue));
               onChanged(newValue);
             },
-            activeColor: AppColors.brandSecondary, // A vibrant color for the 'on' state
+            activeColor: AppColors.feedbackError, // Use red for the 'on' state
             trackColor: MaterialStateProperty.resolveWith<Color?>((states) {
               if (states.contains(MaterialState.selected)) {
-                return AppColors.brandSecondary.withOpacity(0.5);
+                return AppColors.feedbackError.withOpacity(0.5);
               }
               return null; // Use default track color
             }),

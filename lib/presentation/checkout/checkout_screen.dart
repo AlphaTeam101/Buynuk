@@ -67,7 +67,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Total', style: textTheme.titleLarge),
-                      Text('\$92.50', style: textTheme.headlineSmall),
+                      Text('92.50 SAR', style: textTheme.headlineSmall),
                     ],
                   ),
                 ],
@@ -142,7 +142,7 @@ class _SummaryRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(label, style: Theme.of(context).textTheme.bodyLarge),
-        Text('\$${amount.toStringAsFixed(2)}'),
+        Text('${amount.toStringAsFixed(2)} SAR'),
       ],
     );
   }

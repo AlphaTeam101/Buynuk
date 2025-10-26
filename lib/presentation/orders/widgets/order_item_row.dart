@@ -34,7 +34,7 @@ class OrderItemRow extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Text('\$${item.price.toStringAsFixed(2)}', style: textTheme.titleMedium),
+        Text('${item.price.toStringAsFixed(2)} SAR', style: textTheme.titleMedium),
       ],
     );
   }

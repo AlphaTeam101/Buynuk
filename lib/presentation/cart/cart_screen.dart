@@ -2,6 +2,7 @@ import 'package:e_commerce/domain/cart/entities/cart_item.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
 import 'package:e_commerce/presentation/cart/widgets/cart_item_card.dart';
 import 'package:e_commerce/presentation/checkout/checkout_screen.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:e_commerce/presentation/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -14,6 +15,14 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'My Cart',
+          style: TextStyle(color: AppColors.textIconsPrimary), // Explicitly set text color
+        ),
+        backgroundColor: AppColors.surfacePrimary,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: BlocBuilder<CartBloc, CartState>(
           builder: (context, state) {
@@ -46,7 +55,7 @@ class CartScreen extends StatelessWidget {
                               onPressed: (context) {
                                 context.read<CartBloc>().add(CartItemRemoved(item.product.id));
                               },
-                              backgroundColor: Theme.of(context).colorScheme.error,
+                              backgroundColor: AppColors.feedbackError,
                               foregroundColor: Colors.white,
                               icon: Icons.delete,
                               label: 'Delete',
@@ -83,13 +92,13 @@ class _EmptyCartBody extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.shopping_cart_outlined, size: 120, color: Colors.grey.shade300),
+          Icon(Icons.shopping_cart_outlined, size: 120, color: AppColors.surfaceTertiary),
           const SizedBox(height: 24),
-          Text('Your Cart is Empty', style: Theme.of(context).textTheme.headlineSmall),
+          Text('Your Cart is Empty', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.textIconsPrimary)),
           const SizedBox(height: 8),
           Text(
             'Looks like you haven\'t added anything to your cart yet.',
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textIconsSecondary),
             textAlign: TextAlign.center,
           ),
         ],
@@ -104,13 +113,12 @@ class _CheckoutBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 16 + MediaQuery.of(context).padding.bottom),
       decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
+        color: AppColors.surfaceSecondary,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -133,7 +141,7 @@ class _CheckoutBar extends StatelessWidget {
                 child: Text(
                   'Subtotal (${state.totalItems} items)',
                   key: ValueKey<int>(state.totalItems),
-                  style: textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+                  style: textTheme.bodyMedium?.copyWith(color: AppColors.textIconsSecondary),
                 ),
               ),
               const SizedBox(height: 4),
@@ -143,9 +151,9 @@ class _CheckoutBar extends StatelessWidget {
                   return ScaleTransition(scale: animation, child: child);
                 },
                 child: Text(
-                  '\$${state.subtotal.toStringAsFixed(2)}',
+                  '${state.subtotal.toStringAsFixed(2)} SAR',
                   key: ValueKey<double>(state.subtotal),
-                  style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: AppColors.textIconsPrimary),
                 ),
               ),
             ],
@@ -157,6 +165,7 @@ class _CheckoutBar extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CheckoutScreen()));
               },
+              buttonType: AppButtonType.destructive, // Use destructive for red button
             ),
           ),
         ],

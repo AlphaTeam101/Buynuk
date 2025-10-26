@@ -1,6 +1,5 @@
 import 'package:e_commerce/domain/products/entities/product.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'product_card.dart';
 
@@ -13,15 +12,20 @@ class ProductGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      sliver: SliverMasonryGrid.count(
-        crossAxisCount: 2,
-        itemBuilder: (BuildContext context, int index) {
-          final product = products[index];
-          return ProductCard(product: product, index: index);
-        },
-        childCount: products.length,
-        mainAxisSpacing: 24.0, // Increased spacing for a cleaner look
-        crossAxisSpacing: 20.0, // Increased spacing for a cleaner look
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 24.0,
+          crossAxisSpacing: 20.0,
+          childAspectRatio: 0.6, // Adjust this value to fit your card design
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (BuildContext context, int index) {
+            final product = products[index];
+            return ProductCard(product: product, index: index);
+          },
+          childCount: products.length,
+        ),
       ),
     );
   }

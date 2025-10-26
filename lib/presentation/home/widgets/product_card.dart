@@ -28,14 +28,7 @@ class ProductCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surfaceSecondary,
           borderRadius: BorderRadius.circular(15.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: const Offset(0, 5),
-            ),
-          ],
+          border: Border.all(color: AppColors.surfaceTertiary, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +36,7 @@ class ProductCard extends StatelessWidget {
             Stack(
               children: [
                 Hero(
-                  tag: 'product-${product.id}',
+                  tag: 'product_card_${product.id}',
                   child: ClipRRect(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
                     child: Image.network(
@@ -118,87 +111,92 @@ class ProductCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onTap: () {
-                      context.read<CartBloc>().add(CartItemAdded(product));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${product.title} added to cart'),
-                          backgroundColor: AppColors.feedbackError,
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      decoration: const BoxDecoration(
-                        color: AppColors.textIconsPrimary, // Black bar
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Add To Cart',
-                          style: TextStyle(color: AppColors.textIconsOnDark, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.title,
-                    style: textTheme.titleSmall?.copyWith(
-                      color: AppColors.textIconsPrimary,
-                      fontWeight: FontWeight.w500,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      product.title,
+                      style: textTheme.titleSmall?.copyWith(
+                        color: AppColors.textIconsPrimary,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      Text(
-                        '\$300.00', // Static price
-                        style: textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.feedbackError,
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            '300.00 SAR', // Static price
+                            style: textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.feedbackError,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '\$360.00', // Static original price
-                        style: textTheme.bodySmall?.copyWith(
-                          color: AppColors.textIconsSecondary,
-                          decoration: TextDecoration.lineThrough,
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            '360.00 SAR', // Static original price
+                            style: textTheme.bodySmall?.copyWith(
+                              color: AppColors.textIconsSecondary,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
+                        const Icon(Icons.star, color: Colors.amber, size: 16),
+                        const Icon(Icons.star_half, color: Colors.amber, size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          '(44)', // Static review count
+                          style: textTheme.bodySmall?.copyWith(color: AppColors.textIconsSecondary),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                context.read<CartBloc>().add(CartItemAdded(product));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${product.title} added to cart'),
+                    backgroundColor: AppColors.feedbackError,
+                    duration: const Duration(seconds: 2),
                   ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      const Icon(Icons.star_half, color: Colors.amber, size: 16),
-                      const SizedBox(width: 4),
-                      Text(
-                        '(44)', // Static review count
-                        style: textTheme.bodySmall?.copyWith(color: AppColors.textIconsSecondary),
-                      ),
-                    ],
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 12.0),
+                decoration: const BoxDecoration(
+                  color: AppColors.textIconsPrimary, // Black bar
+                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(15.0)),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Add To Cart',
+                    style: TextStyle(color: AppColors.textIconsOnDark, fontWeight: FontWeight.bold),
                   ),
-                ],
+                ),
               ),
             ),
           ],

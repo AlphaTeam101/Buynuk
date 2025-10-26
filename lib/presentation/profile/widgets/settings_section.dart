@@ -1,7 +1,5 @@
-import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../design_system/app_colors.dart';
 
 class SettingsSection extends StatelessWidget {
   final String title;
@@ -15,9 +13,7 @@ class SettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-    final appColors = theme.extension<AppColorsExtension>()!;
+    final textTheme = Theme.of(context).textTheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -29,14 +25,14 @@ class SettingsSection extends StatelessWidget {
             child: Text(
               title,
               style: textTheme.labelLarge?.copyWith(
-                color: AppColors.textIconsPrimaryDark78,
+                color: AppColors.textIconsSecondary,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-              color: appColors.surfaceSecondary,
+              color: AppColors.surfaceSecondary,
               borderRadius: BorderRadius.circular(12.0),
             ),
             child: Column(
@@ -45,11 +41,11 @@ class SettingsSection extends StatelessWidget {
                   children: [
                     items[index],
                     if (index < items.length - 1)
-                      Divider(
+                      const Divider(
                         height: 1,
                         indent: 20,
                         endIndent: 20,
-                        color: appColors.surfaceSecondary,
+                        color: AppColors.surfaceTertiary,
                       ),
                   ],
                 );

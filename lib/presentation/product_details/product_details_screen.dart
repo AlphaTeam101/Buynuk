@@ -84,7 +84,7 @@ class _AddToCartBar extends StatelessWidget {
               Text('Price', style: textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
               const SizedBox(height: 4),
               Text(
-                '\$${product.price.toDouble().toStringAsFixed(2)}',
+                '${product.price.toDouble().toStringAsFixed(2)} SAR',
                 style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
             ],
