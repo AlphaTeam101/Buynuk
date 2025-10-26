@@ -6,6 +6,7 @@ abstract class ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts({
     required int offset,
     required int limit,
+    String? category,
   });
 
   Future<List<ProductModel>> searchProducts({
@@ -29,13 +30,27 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   Future<List<ProductModel>> getProducts({
     required int offset,
     required int limit,
+    String? category,
   }) async {
+    final queryParameters = <String, dynamic>{
+      'offset': offset,
+      'limit': limit,
+    };
+
+    if (category != null && category.isNotEmpty) {
+      // The API uses categoryId, so we need to find the ID for the category name.
+      // This is a simplified approach. A real app might have a better way to get category IDs.
+      final categoriesResponse = await _dio.get('https://api.escuelajs.co/api/v1/categories');
+      final categories = categoriesResponse.data as List;
+      final categoryMap = { for (var e in categories) e['name'] : e['id' ] };
+      if (categoryMap.containsKey(category)) {
+        queryParameters['categoryId'] = categoryMap[category];
+      }
+    }
+
     final response = await _dio.get(
       'https://api.escuelajs.co/api/v1/products',
-      queryParameters: {
-        'offset': offset,
-        'limit': limit,
-      },
+      queryParameters: queryParameters,
     );
     final data = response.data as List;
     return data.map((json) => ProductModel.fromJson(json)).toList();

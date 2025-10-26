@@ -10,6 +10,7 @@ import 'package:e_commerce/logic/theme/theme_state.dart';
 import 'package:e_commerce/presentation/auth/bloc/login_bloc.dart';
 import 'package:e_commerce/presentation/auth/login_screen.dart';
 import 'package:e_commerce/presentation/cart/bloc/cart_bloc.dart';
+import 'package:e_commerce/presentation/home/home_screen.dart';
 import 'package:e_commerce/presentation/main/main_screen.dart';
 import 'package:e_commerce/presentation/design_system/app_theme.dart';
 import 'package:e_commerce/presentation/design_system/theme_animation_wrapper.dart';
@@ -17,6 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'data/cart/models/cart_item_model.dart';
+import 'data/categories/models/category_model.dart';
+import 'data/products/models/product_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +55,7 @@ void main() async {
   final Widget initialScreen = userOrError.fold(
     (error) => BlocProvider<LoginBloc>(
       create: (context) => getIt<LoginBloc>(),
-      child: const LoginScreen(),
+      child: const MainScreen(),
     ),
     (user) => const MainScreen(),
   );

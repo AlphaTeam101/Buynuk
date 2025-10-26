@@ -11,6 +11,7 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 const _kProductLimit = 10;
+const _kCategoryToFilter = 'Electronics';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetCategoriesUseCase _getCategoriesUseCase;
@@ -29,7 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
     final results = await Future.wait([
       _getCategoriesUseCase(),
-      _getProductsUseCase(offset: 0, limit: _kProductLimit),
+      _getProductsUseCase(offset: 0, limit: _kProductLimit, category: _kCategoryToFilter),
     ]);
 
     final categoriesResult = results[0] as Either<String, List<Category>>;
@@ -62,6 +63,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final result = await _getProductsUseCase(
       offset: state.products.length,
       limit: _kProductLimit,
+      category: _kCategoryToFilter,
     );
 
     result.fold(

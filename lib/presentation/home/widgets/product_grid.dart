@@ -17,12 +17,11 @@ class ProductGrid extends StatelessWidget {
         crossAxisCount: 2,
         itemBuilder: (BuildContext context, int index) {
           final product = products[index];
-          // The animation delay is now based on the product's index in the overall list
           return ProductCard(product: product, index: index);
         },
         childCount: products.length,
-        mainAxisSpacing: 20.0,
-        crossAxisSpacing: 16.0,
+        mainAxisSpacing: 24.0, // Increased spacing for a cleaner look
+        crossAxisSpacing: 20.0, // Increased spacing for a cleaner look
       ),
     );
   }

@@ -11,7 +11,8 @@ class GetProductsUseCase {
   Future<Either<String, List<Product>>> call({
     required int offset,
     required int limit,
+    String? category,
   }) async {
-    return await _repository.getProducts(offset: offset, limit: limit);
+    return await _repository.getProducts(offset: offset, limit: limit, category: category);
   }
 }

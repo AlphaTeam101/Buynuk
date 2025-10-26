@@ -108,10 +108,10 @@ class AppTheme {
       primary: AppColors.brandPrimary,
       secondary: AppColors.brandSecondary,
       surface: AppColors.surfacePrimary,
-      onSurface: AppColors.textIconsPrimaryDark, // Text on surface
+      onSurface: AppColors.textIconsPrimaryDark78, // Text on surface
       error: AppColors.feedbackError,
     ),
-    textTheme: _buildTextTheme(AppColors.textIconsPrimaryDark),
+    textTheme: _buildTextTheme(AppColors.textIconsPrimaryDark78),
     extensions: const <ThemeExtension<dynamic>>[
       AppColorsExtension(
         brandSecondary: AppColors.brandSecondary,

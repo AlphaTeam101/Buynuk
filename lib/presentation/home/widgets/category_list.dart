@@ -1,5 +1,5 @@
 import 'package:e_commerce/domain/categories/entities/category.dart';
-import 'package:e_commerce/presentation/design_system/app_theme.dart';
+import 'package:e_commerce/presentation/design_system/app_colors.dart';
 import 'package:e_commerce/presentation/products_by_category/products_by_category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -40,9 +40,7 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final appColors = theme.extension<AppColorsExtension>()!;
-    final textTheme = theme.textTheme;
+    final textTheme = Theme.of(context).textTheme;
 
     return InkWell(
       onTap: () {
@@ -53,36 +51,41 @@ class _CategoryCard extends StatelessWidget {
           ),
         );
       },
-      borderRadius: BorderRadius.circular(12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            radius: 32,
-            backgroundColor: appColors.surfaceSecondary,
-            child: ClipOval(
-              child: Image.network(
+      borderRadius: BorderRadius.circular(15.0),
+      child: Container(
+        width: 150, // Increased width for a better look
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15.0),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              Image.network(
                 category.image,
-                width: 64,
-                height: 64,
                 fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return const Center(child: CircularProgressIndicator(strokeWidth: 2));
-                },
+                color: Colors.black.withOpacity(0.4),
+                colorBlendMode: BlendMode.darken,
                 errorBuilder: (context, error, stackTrace) {
-                  // If the image fails to load (like with pravatar.cc), show a fallback icon.
-                  return const Icon(Icons.category_outlined, color: Colors.grey, size: 32);
+                  return const Center(
+                    child: Icon(Icons.image_not_supported, color: AppColors.textIconsSecondary, size: 40),
+                  );
                 },
               ),
-            ),
+              Center(
+                child: Text(
+                  category.name,
+                  style: textTheme.titleMedium?.copyWith(
+                    color: AppColors.textIconsOnDark,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            category.name,
-            style: textTheme.bodyMedium?.copyWith(color: appColors.textIconsSecondary),
-          ),
-        ],
+        ),
       ),
     );
   }

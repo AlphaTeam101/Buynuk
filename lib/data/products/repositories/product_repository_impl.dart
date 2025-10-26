@@ -14,9 +14,10 @@ class ProductRepositoryImpl implements ProductRepository {
   Future<Either<String, List<Product>>> getProducts({
     required int offset,
     required int limit,
+    String? category,
   }) async {
     try {
-      final productModels = await _remoteDataSource.getProducts(offset: offset, limit: limit);
+      final productModels = await _remoteDataSource.getProducts(offset: offset, limit: limit, category: category);
       return Right(productModels);
     } on DioException catch (e) {
       return Left(e.response?.data?['message'] ?? 'An unknown error occurred');
