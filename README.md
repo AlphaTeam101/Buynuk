@@ -1,4 +1,4 @@
-# Platini Store - Flutter E-commerce App 🛍️
+# Buynuk Store - Flutter E-commerce App 🛍️
 
 A feature-rich, modern, and high-performance e-commerce mobile application built with Flutter. This project was developed as a deep dive into the Flutter framework, focusing on implementing a scalable, testable, and maintainable codebase using Clean Architecture and BLoC.
 
