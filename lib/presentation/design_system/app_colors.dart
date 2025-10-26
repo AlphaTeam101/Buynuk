@@ -14,7 +14,8 @@ class AppColors {
   static const Color textIconsPrimary = Color(0xFF212121); // Darkest Gray/Black for main text
   static const Color textIconsSecondary = Color(0xFF888888); // Lighter Gray
   static const Color textIconsTertiary = Color(0xFFCCCCCC); // Even Lighter Gray
-  static const Color textIconsOnDark = Color(0xFFFFFFFF); // White for text on dark backgrounds
+  static const Color textIconsQuaternary = Color(0xFFFFFFFF); // White for text on dark backgrounds
+  static const Color textIconsOnDark = Color(0xFFFFFFFF);
   static const Color textIconsPrimaryDark78 = Color(0xC7FFFFFF);
 
   // --- SURFACE COLORS ---
@@ -30,4 +31,9 @@ class AppColors {
   static const Color feedbackWarning = Color(0xFFF5A623); // Orange
   static const Color feedbackError = Color(0xFFD0021B);   // Red for errors and Flash Sales
   static const Color feedbackInfo = Color(0xFF4A90E2);    // Blue
+
+  // Color Palette
+  static const Color paletteRed100 = Color(0xFFF05353);
+  static const Color paletteGreen100 = Color(0xFF3DD598);
+  static const Color paletteBlue100 = Color(0xFF539FF0);
 }
